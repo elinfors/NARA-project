@@ -22,6 +22,7 @@ export default function App() {
         setUser(user)
         setInitializing(false)
       })
+      console.log(user)
       return subscriber
     },[])
 
