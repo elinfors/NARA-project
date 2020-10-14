@@ -1,16 +1,21 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import {firebase} from '../Firebase/config'
-import styles from './styles';
+import styles from './styles'
+import {CurrentUserContext} from '../../App'
 
-export default function HomeScreen(props) {
+
+
+export default function HomeScreen() {
+
+    const [currentUser, setCurrentUser] = useState(null)
 
     const [Food, setFood] = useState('')
     const [Mood, setMood] = useState('')
 
 
-
-    const userId = props.extraData.uid
+    //const userId = props.extraData.uid
+    const userId = useContext(CurrentUserContext)
     //console.log(userId)
 
     const onLogoutPress = () => {
@@ -24,7 +29,7 @@ export default function HomeScreen(props) {
     const onAddLogg = () => {
         const usersRef = firebase.firestore().collection('users')
 
-        usersRef.doc(userId).collection('meal').add({
+        usersRef.doc(userId.user.uid).collection('meal').add({
             food: Food,
             mood: Mood
         })
@@ -46,11 +51,16 @@ export default function HomeScreen(props) {
     }); 
     }
     */
+    console.log('home2')
 
+    useEffect(()=>{
+        setCurrentUser(userId.user.uid)
+        console.log(currentUser)
+    }, [])
 
     return (
         <View>
-            <Text>{userId}</Text>
+            <Text>{currentUser}</Text>
             <Text>tja</Text>
            
             <TouchableOpacity
@@ -83,6 +93,7 @@ export default function HomeScreen(props) {
                     <Text style={styles.buttonTitle}>Add</Text>
                 </TouchableOpacity>
                 <Text>'tjena</Text>
+
         </View>
-    )
+    );
 };
