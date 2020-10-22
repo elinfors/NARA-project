@@ -41,7 +41,7 @@ export default function App() {
             if (route.name === 'Home') {
               iconName = focused
                 ? 'ios-home'
-                : 'ios-home-outline';
+                : 'ios-home';
             } else if (route.name === 'Settings') {
               iconName = focused ? 'ios-list-box' : 'ios-list';
             }
