@@ -4,7 +4,10 @@ import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import { LoginScreen, HomeScreen, RegistrationScreen } from './Screens'
+//import { LoginScreen, HomeScreen, RegistrationScreen } from './Screens'
+import LoginScreen from "./Screens/LoginScreen/LoginScreen"
+import HomeScreen from "./Screens/HomeScreen/HomeScreen"
+import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen"
 import AddScreen from './Screens/AddScreen/AddScreen'
 import AddModal from './Screens/AddModalScreen/AddModalScreen'
 import {firebase} from './Screens/Firebase/config'
@@ -16,6 +19,7 @@ if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
 export const CurrentUserContext = React.createContext();
+export const ModalVisibleContext = React.createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -30,6 +34,11 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [user, setUser] = useState(null)
   const [initializing,setInitializing]=useState(true)
+  const [modalVisible, setModalVisible] = useState(false)
+
+  function toggleVisible () {
+    setModalVisible(visible => !visible);
+  }
 
   createBottomTabs = () => {
     return(
@@ -79,6 +88,7 @@ export default function App() {
 
   return (
     <CurrentUserContext.Provider value = {{user}}>
+      <ModalVisibleContext.Provider value={{modalVisible, setModalVisible, toggleVisible}}>
       <NavigationContainer>
         <Stack.Navigator>
           {user ? (
@@ -93,6 +103,7 @@ export default function App() {
           )}
           </Stack.Navigator>
       </NavigationContainer>
+      </ModalVisibleContext.Provider>
     </CurrentUserContext.Provider>
 
   );

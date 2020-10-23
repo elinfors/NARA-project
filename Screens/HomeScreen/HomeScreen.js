@@ -3,10 +3,11 @@ import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import {firebase} from '../Firebase/config'
 import styles from './styles'
 import {CurrentUserContext} from '../../App'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 
-export default function HomeScreen() {
+export default function HomeScreen({navigation}) {
 
     const [currentUser, setCurrentUser] = useState(null)
 
@@ -18,13 +19,6 @@ export default function HomeScreen() {
     const userId = useContext(CurrentUserContext)
     //console.log(userId)
 
-    const onLogoutPress = () => {
-        firebase.auth().signOut().then(function() {
-            console.log('Signed Out');
-          }, function(error) {
-            console.error('Sign Out Error', error);
-          });
-    }
 
     const onAddLogg = () => {
         const usersRef = firebase.firestore().collection('users')
@@ -51,7 +45,7 @@ export default function HomeScreen() {
     }); 
     }
     */
-    console.log('home2')
+
 
     useEffect(()=>{
         setCurrentUser(userId.user.uid)
@@ -60,24 +54,52 @@ export default function HomeScreen() {
 
     return (
         <View>
-            <Text>{currentUser}</Text>
-            <Text>tja</Text>
-           
-            <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => onLogoutPress()}>
-                    <Text style={styles.buttonTitle}>Log out</Text>
+            <View style={styles.dayBanner}>
+                <TouchableOpacity>
+                    <Ionicons name={'ios-arrow-back'} size={30} color={'black'} />
+                </TouchableOpacity>
+                <Text style={styles.headline}>TODAY</Text>
+                <TouchableOpacity>
+                    <Ionicons name={'ios-arrow-forward'} size={30} color={'black'} />
                 </TouchableOpacity>
 
-                <TextInput
-                    style={styles.input}
-                    placeholder='Food'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setFood(text)}
-                    value={Food}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
+            </View>
+
+            
+            <Text style={styles.description}>Register today’s meal here! </Text>
+           
+
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => navigation.navigate('Add')}>
+                    <Text style={styles.cardTitle}>Breakfast</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => onLogoutPress()}>
+                    <Text style={styles.cardTitle}>Snack</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => onLogoutPress()}>
+                    <Text style={styles.cardTitle}>Lunch</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => onLogoutPress()}>
+                    <Text style={styles.cardTitle}>Snack</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => onLogoutPress()}>
+                    <Text style={styles.cardTitle}>Dinner</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => onLogoutPress()}>
+                    <Text style={styles.cardTitle}>Snack</Text>
+            </TouchableOpacity>
+            {/*}
                 <TextInput
                     style={styles.input}
                     placeholder='Mood'
@@ -92,7 +114,7 @@ export default function HomeScreen() {
                     onPress={() => onAddLogg()}>
                     <Text style={styles.buttonTitle}>Add</Text>
                 </TouchableOpacity>
-                <Text>'tjena</Text>
+    */}
 
         </View>
     );

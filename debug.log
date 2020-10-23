@@ -1,0 +1,6 @@
+[1014/142003.071:ERROR:filesystem_win.cc(129)] GetFileAttributes C:\Users\Elin\AppData\Local\Google\Chrome\User Data\Crashpad\attachments\d3498081-190d-4854-ac23-d3eb6a5bd9e8: Det går inte att hitta sökvägen. (0x3)
+[1014/142003.075:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
+[1014/145046.388:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
+[1014/150812.660:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
+[1022/161346.792:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
+[1023/112005.820:ERROR:directory_reader_win.cc(43)] FindFirstFile: Det går inte att hitta sökvägen. (0x3)
