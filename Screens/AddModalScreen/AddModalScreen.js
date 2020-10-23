@@ -2,16 +2,19 @@ import React, { useState, useContext} from 'react';
 import { StyleSheet, View, Button, Text, TouchableOpacity, Image } from "react-native";
 import Modal from 'react-native-modal';
 import {ModalVisibleContext} from '../../App'
+import {CurrentMealContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 var plusBtn = require('../../Components/Images/plusBtn.png')
+var plusButton = require('../../Components/Images/plus.png')
 
 
 
 export default AddModal = () => {
  // const [modalVisible, setModalVisible] = useState(false);
-  const [currentStage, setCurrentStage] = useState(1)
+  //const [currentStage, setCurrentStage] = useState(1)
   const [inputMeal, setinputMeal] = useState('')
   const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
+  const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
 
   const handleNext = () => {
     setCurrentStage(currentStage+1)
@@ -40,7 +43,7 @@ export default AddModal = () => {
        </>)
     }
     if(stage === 2){
-      return  <Text> Form</Text>
+    return  <Text> {currentMeal} at {currentStage}</Text>
     }
     if(stage === 3){
       return  <Text>what did you eat?</Text>; 
@@ -59,7 +62,7 @@ export default AddModal = () => {
       <TouchableOpacity onPress={() => setModalVisible(true)}
         style={backgroundColor='white'}
       >
-    <Image source = {plusBtn}/>    
+    <Image source = {plusButton}/>    
       </TouchableOpacity>
 
       <View style={styles.container}>
@@ -112,7 +115,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     borderTopRightRadius: 17,
     borderTopLeftRadius: 17,
-    height: '90%'
+    height: '92%'
   },
   headlineView:{
     flex: 1,
