@@ -18,8 +18,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 if (!global.btoa) {  global.btoa = encode }
 if (!global.atob) { global.atob = decode }
 
-export const CurrentUserContext = React.createContext();
-export const ModalVisibleContext = React.createContext();
+export const CurrentUserContext = createContext();
+export const ModalVisibleContext = createContext();
+export const CurrentMealContext = createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -35,6 +36,8 @@ export default function App() {
   const [user, setUser] = useState(null)
   const [initializing,setInitializing]=useState(true)
   const [modalVisible, setModalVisible] = useState(false)
+  const [currentMeal, setCurrentMeal] = useState(null)
+  const [currentStage, setCurrentStage] = useState(1)
 
   function toggleVisible () {
     setModalVisible(visible => !visible);
@@ -89,6 +92,7 @@ export default function App() {
   return (
     <CurrentUserContext.Provider value = {{user}}>
       <ModalVisibleContext.Provider value={{modalVisible, setModalVisible, toggleVisible}}>
+        <CurrentMealContext.Provider value={{currentMeal, setCurrentMeal, currentStage, setCurrentStage}}>
       <NavigationContainer>
         <Stack.Navigator>
           {user ? (
@@ -103,6 +107,7 @@ export default function App() {
           )}
           </Stack.Navigator>
       </NavigationContainer>
+      </CurrentMealContext.Provider>
       </ModalVisibleContext.Provider>
     </CurrentUserContext.Provider>
 

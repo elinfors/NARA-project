@@ -3,6 +3,8 @@ import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import {firebase} from '../Firebase/config'
 import styles from './styles'
 import {CurrentUserContext} from '../../App'
+import {ModalVisibleContext} from '../../App'
+import {CurrentMealContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -10,6 +12,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 export default function HomeScreen({navigation}) {
 
     const [currentUser, setCurrentUser] = useState(null)
+    const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
+    const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
 
     const [Food, setFood] = useState('')
     const [Mood, setMood] = useState('')
@@ -45,6 +49,12 @@ export default function HomeScreen({navigation}) {
     }); 
     }
     */
+   function addMeal(meal_type){
+        setModalVisible(true)
+        setCurrentMeal(meal_type)
+        setCurrentStage(2)
+
+   }
 
 
     useEffect(()=>{
@@ -56,11 +66,11 @@ export default function HomeScreen({navigation}) {
         <View>
             <View style={styles.dayBanner}>
                 <TouchableOpacity>
-                    <Ionicons name={'ios-arrow-back'} size={30} color={'black'} />
+                    <Ionicons name={'ios-arrow-back'} size={30} color={'white'} />
                 </TouchableOpacity>
                 <Text style={styles.headline}>TODAY</Text>
                 <TouchableOpacity>
-                    <Ionicons name={'ios-arrow-forward'} size={30} color={'black'} />
+                    <Ionicons name={'ios-arrow-forward'} size={30} color={'white'} />
                 </TouchableOpacity>
 
             </View>
@@ -71,32 +81,32 @@ export default function HomeScreen({navigation}) {
 
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => navigation.navigate('Add')}>
+                    onPress={() => {addMeal('Breakfast')}}>
                     <Text style={styles.cardTitle}>Breakfast</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => onLogoutPress()}>
+                    onPress={() => {addMeal('Snack')}}>
                     <Text style={styles.cardTitle}>Snack</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => onLogoutPress()}>
+                    onPress={() => {setModalVisible(true)}}>
                     <Text style={styles.cardTitle}>Lunch</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => onLogoutPress()}>
+                    onPress={() => {setModalVisible(true)}}>
                     <Text style={styles.cardTitle}>Snack</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => onLogoutPress()}>
+                    onPress={() => {setModalVisible(true)}}>
                     <Text style={styles.cardTitle}>Dinner</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => onLogoutPress()}>
+                    onPress={() => {setModalVisible(true)}}>
                     <Text style={styles.cardTitle}>Snack</Text>
             </TouchableOpacity>
             {/*}

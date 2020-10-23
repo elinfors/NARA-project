@@ -32,16 +32,16 @@ export default StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold"
     },
-    mealTitle: {
-        color: 'white',
+    cardTitle: {
+        color: '#404040',
         fontSize: 20,
     },
     mealCard: {
         backgroundColor: '#ffffff',
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 10,
-        height: 48,
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
+        height: 60,
         borderRadius: 5,
         alignItems: "center",
         justifyContent: 'center'
@@ -59,6 +59,7 @@ export default StyleSheet.create({
     },
     headline: {
         fontSize: 30,
-        fontWeight:'bold'
+        fontWeight:'bold', 
+        color:'white'
     }
 })
