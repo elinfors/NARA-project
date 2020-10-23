@@ -32,33 +32,4 @@ export default StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold"
     },
-    mealTitle: {
-        color: 'white',
-        fontSize: 20,
-    },
-    mealCard: {
-        backgroundColor: '#ffffff',
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 10,
-        height: 48,
-        borderRadius: 5,
-        alignItems: "center",
-        justifyContent: 'center'
-    },
-    description: {
-        textAlign: 'center',
-        margin:20,
-        fontSize: 20
-    },
-    dayBanner:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#ABDA9B',
-        padding:20
-    },
-    headline: {
-        fontSize: 30,
-        fontWeight:'bold'
-    }
 })

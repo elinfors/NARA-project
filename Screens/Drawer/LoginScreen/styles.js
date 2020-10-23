@@ -1,10 +1,20 @@
-
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center'
+        alignItems: 'center',
+        backgroundColor: '#6ED4C8'
+    },
+    title: {
+
+    },
+    logo: {
+        flex: 1,
+        height: 120,
+        width: 90,
+        alignSelf: "center",
+        margin: 30
     },
     input: {
         height: 48,
@@ -32,33 +42,18 @@ export default StyleSheet.create({
         fontSize: 16,
         fontWeight: "bold"
     },
-    mealTitle: {
-        color: 'white',
-        fontSize: 20,
-    },
-    mealCard: {
-        backgroundColor: '#ffffff',
-        marginLeft: 10,
-        marginRight: 10,
-        marginTop: 10,
-        height: 48,
-        borderRadius: 5,
+    footerView: {
+        flex: 1,
         alignItems: "center",
-        justifyContent: 'center'
+        marginTop: 20
     },
-    description: {
-        textAlign: 'center',
-        margin:20,
-        fontSize: 20
+    footerText: {
+        fontSize: 16,
+        color: '#2e2e2d'
     },
-    dayBanner:{
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        backgroundColor: '#ABDA9B',
-        padding:20
-    },
-    headline: {
-        fontSize: 30,
-        fontWeight:'bold'
+    footerLink: {
+        color: "#788eec",
+        fontWeight: "bold",
+        fontSize: 16
     }
 })
