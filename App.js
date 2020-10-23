@@ -37,7 +37,7 @@ export default function App() {
   const [initializing,setInitializing]=useState(true)
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMeal, setCurrentMeal] = useState(null)
-  const [currentStage, setCurrentStage] = useState(1)
+  const [currentStage, setCurrentStage] = useState(0)
 
   function toggleVisible () {
     setModalVisible(visible => !visible);
