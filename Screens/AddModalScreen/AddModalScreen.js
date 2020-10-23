@@ -7,6 +7,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 var plusBtn = require('../../Components/Images/plusBtn.png')
 var plusButton = require('../../Components/Images/plus.png')
 
+import MealForm from './FormComponents/mealForm'
+import CompForm from './FormComponents/CompForm'
+
 
 
 export default AddModal = () => {
@@ -16,7 +19,9 @@ export default AddModal = () => {
   const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
   const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
 
-  const handleNext = () => {
+
+  const handleNext = (meal) => {
+    setinputMeal(meal)
     setCurrentStage(currentStage+1)
     console.log(currentStage)
   }
@@ -25,37 +30,6 @@ export default AddModal = () => {
     setCurrentStage(currentStage-1)
     console.log(currentStage)
   }
-
-  const renderText = (stage) => {
-    if (stage === 1) {
-       return (<>
-            
-           
-              <TouchableOpacity onPress={()=>setinputMeal('breakfast')} style={styles.buttonStyle}>
-                <Text style={styles.buttonTitle}>Breakfast</Text>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={()=>setinputMeal('lunch')} style={styles.buttonStyle}>
-                <Text style={styles.buttonTitle}>Lunch</Text>
-              </TouchableOpacity>
-
-
-
-       </>)
-    }
-    if(stage === 2){
-    return  <Text> {currentMeal} at {currentStage}</Text>
-    }
-    if(stage === 3){
-      return  <Text>what did you eat?</Text>; 
-    }
-    if(stage === 4){
-      return  <Text>pre filled question about meal</Text>; 
-    }
-    if(stage === 5){
-      return  <Text>add comment</Text>; 
-    }
-}
-
 
   return (
     <>
@@ -72,34 +46,42 @@ export default AddModal = () => {
           onBackdropPress={() => setModalVisible(false)}
           style={styles.contentView}
         >
-  
+        {currentStage === 0 ? 
           <View style={styles.ModalView}>
 
-            <View style={styles.headlineView}>
-              <TouchableOpacity onPress={()=>handleBack()}>
-                <Ionicons name={'ios-arrow-back'} size={30} color={'black'} />
-              </TouchableOpacity>
-              <Text style={styles.textStyle}>Hi 👋!</Text>
-              <TouchableOpacity>
-                <Ionicons name={'ios-close'} size={40} color={'black'} />
-              </TouchableOpacity>
-            </View>
+          <View style={styles.headlineView}>
             
-            <View style={styles.constumContentView}>
-              {renderText(currentStage)}
+            <Text style={styles.textStyle}>Hi 👋!</Text>
+            
+          </View>
+          
+          <View style={styles.constumContentView}>
+            <TouchableOpacity onPress={()=>handleNext('breakfast')} style={styles.buttonStyle}>
+              <Text style={styles.buttonTitle}>Breakfast</Text>
+            </TouchableOpacity>
 
-            </View>
+            <TouchableOpacity onPress={()=>handleNext('lunch')} style={styles.buttonStyle}>
+              <Text style={styles.buttonTitle}>Lunch</Text>
+            </TouchableOpacity>
 
-            {/*NEXT BUTTON*/}
-              <View style={styles.nextBtnView}>
-                <TouchableOpacity
-                  style={styles.buttonStyle}
-                  onPress={()=>handleNext()}>
-                  <Text style={styles.buttonTitle}>{currentStage === 5 ? 'Submit': 'Next'}</Text>
-                </TouchableOpacity>
-              </View>
+            <TouchableOpacity onPress={()=>handleNext('comp')} style={styles.buttonStyle}>
+              <Text style={styles.buttonTitle}>Comp</Text>
+            </TouchableOpacity>
 
           </View>
+
+
+        </View>
+        : 
+        inputMeal === 'comp' ? 
+        <CompForm></CompForm>
+        :
+        <MealForm></MealForm>
+      
+        
+        }
+  
+          
           
                 
         </Modal>
