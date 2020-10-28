@@ -38,9 +38,8 @@ export default AddModal = () => {
   return (
     <>
       <TouchableOpacity onPress={() => setModalVisible(true)}
-        style={backgroundColor='white'}
       >
-    <Image source = {plusButton}/>    
+    <Image source = {plusButton} style={styles.plusButton}/>    
       </TouchableOpacity>
 
       <View style={styles.container}>
@@ -160,5 +159,8 @@ mealCard: {
     alignItems: "center",
     justifyContent: 'center'
 },
+plusButton:{
+  marginRight:10
+}
   
 });
