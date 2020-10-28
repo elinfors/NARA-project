@@ -1,4 +1,4 @@
-import React, { useState, useContext} from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import { StyleSheet, View, ScrollView, Button, Text, TouchableOpacity, Image, TextInput, ShadowPropTypesIOS, Animated } from "react-native";
 import { Slider } from 'react-native-elements';
 import Modal from 'react-native-modal';
@@ -19,16 +19,18 @@ export default MealForm = () => {
     // STATES TO SEND TO FIREBASE
     const [didEat, setDidEat] = useState(true)
     const [foodList , setFoodList] = useState([])
+    const [foodObj, setfoodObj] = useState({})
     const [mealTime, setMealTime] = useState('')
     const [feelRate, setFeelRate] = useState(1)
     const [ateWith, setAteWith] = useState('')
     const [ateAt, setAteAt] = useState('')
     const [comment, setComment] = useState('')
+    
+    const [favorites, setFavorites] = useState([])
 
     // "HELP-STATES"
     const [commentHelp, setCommentHelp] = useState('')
     const [food, setFood] = useState()
-
 
 
     const handleNext = () => {
@@ -43,11 +45,16 @@ export default MealForm = () => {
       }
 
     const handleFood = () =>{
+        /*
           let list = foodList
           list.push(food)
           setFoodList(list)
           setFood('')
           console.log(foodList)
+          */
+        foodObj[food] = 1
+        console.log(foodObj)
+        setFood('')
       }
 
     const handleComment = () =>{
@@ -56,19 +63,47 @@ export default MealForm = () => {
         console.log(comment)
     }
 
+    
+
+    const handleFav = (sentFood) =>{
+        if(favorites.includes(sentFood)){
+            console.log('hehe')
+        }
+        else{
+            let list = favorites
+            list.push(sentFood)
+            setFavorites(list)
+        }
+        console.log(favorites)  
+    }
+
+    const handleIncrease = (sentFood) =>{
+        console.log(sentFood)
+        foodObj[sentFood] += 1
+        console.log(foodObj)
+    }
+    const handleDecrese = (sentFood) =>{
+        console.log(sentFood)
+        if(foodObj[sentFood] > 1){
+           foodObj[sentFood] -= 1
+           console.log(foodObj) 
+        }
+        else{
+            console.log("can't remove")
+        }
+    }
+
     const handleSubmit = () =>{
         console.log('SUBMIT:')
-
         console.log(didEat)
-        console.log(foodList)
+        //console.log(foodList)
         console.log(mealTime)
         console.log(feelRate)
         console.log(ateWith)
         console.log(ateAt)
         console.log(comment)
-
-
     }
+
     
 
       const renderText = (stage) => {
@@ -100,11 +135,53 @@ export default MealForm = () => {
                     autoCapitalize="none"
                     autoCorrect={false}
                 />
-    
-            <Text>{foodList.map(food => {return(
-                <Text>{food +', '}</Text>
-            ) 
-            })}</Text>
+           {/*} <View>
+                <ScrollView>*/}
+                    <View style={styles.listView}>
+                        {Object.keys(foodObj).map(food => {return(
+                            <View style={styles.listViewItem}>
+                                <View style={{justifyContent:'flex-start', flex:1}}>
+                                    <Text>{food}</Text>
+                                </View>
+
+                                <View style={{justifyContent: 'flex-end', flex:1, flexDirection:'row'}}>
+                                    <TouchableOpacity onPress={()=>handleDecrese(food)}>
+                                        <Ionicons name={'ios-remove-circle-outline'} size={30} color={'black'} />
+                                    </TouchableOpacity>
+                                    <Text>{foodObj[food]}</Text>
+                                    <TouchableOpacity onPress={()=>handleIncrease(food)}>
+                                        <Ionicons name={'ios-add-circle-outline'} size={30} color={'black'} />
+                                    </TouchableOpacity>
+                            
+                                    <TouchableOpacity onPress={()=>handleFav(food)}>
+                                        <Ionicons name={'ios-heart'} size={30} color={'black'} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+
+                        
+                        ) 
+                    })}</View>
+                    <Text>Favorites</Text>
+                    <View style={styles.listView}>
+                        {favorites.map(item =>{return (
+                            <View style={styles.listViewItem}>
+                                <View style={{justifyContent:'flex-start', flex:1}}>
+                                    <Text>{item}</Text>
+                                </View>
+                                <View style={{justifyContent: 'flex-end', flex:1, flexDirection:'row'}}>
+                                    <TouchableOpacity onPress={()=>handleFav(food)}>
+                                        <Ionicons name={'ios-heart'} size={30} color={'black'} />
+                                    </TouchableOpacity>
+                                </View>
+
+                            </View>
+
+                        )})}
+                    </View>
+                {/*</ScrollView>
+            </View>*/}
+        
           </>)
         }
         if(stage === 3){
@@ -364,6 +441,21 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         marginRight: 30,
         paddingLeft: 16
+    },
+
+    // STAGE 1 - add food
+    listView:{
+        flex:1,
+        flexDirection:'column',
+    },
+    listViewItem:{
+        flex:1,
+        flexDirection:'row',
+        //justifyContent: 'space-between',
+        alignItems: 'center',
+        borderBottomColor: '#C4C4C4',
+        borderBottomWidth: 1,
+        width: '100%'
     },
 
     // STAGE 3 - WHAT DID YOU FEEL....
