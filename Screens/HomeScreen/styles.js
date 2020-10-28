@@ -62,4 +62,5 @@ export default StyleSheet.create({
         fontWeight:'bold', 
         color:'white'
     }
+
 })

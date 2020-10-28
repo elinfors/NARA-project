@@ -86,28 +86,28 @@ export default function HomeScreen({navigation}) {
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => {addMeal('Snack')}}>
-                    <Text style={styles.cardTitle}>Snack</Text>
+                    onPress={() => {addMeal('Morning snack')}}>
+                    <Text style={styles.cardTitle}>Morning snack</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => {setModalVisible(true)}}>
+                    onPress={() => {addMeal('Lunch')}}>
                     <Text style={styles.cardTitle}>Lunch</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => {setModalVisible(true)}}>
-                    <Text style={styles.cardTitle}>Snack</Text>
+                    onPress={() => {addMeal('Afternoon snack')}}>
+                    <Text style={styles.cardTitle}>Afternoon snack</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => {setModalVisible(true)}}>
+                    onPress={() => {addMeal('Dinner')}}>
                     <Text style={styles.cardTitle}>Dinner</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={() => {setModalVisible(true)}}>
-                    <Text style={styles.cardTitle}>Snack</Text>
+                    onPress={() => {addMeal('Evening snack')}}>
+                    <Text style={styles.cardTitle}>Evening snack</Text>
             </TouchableOpacity>
             {/*}
                 <TextInput
