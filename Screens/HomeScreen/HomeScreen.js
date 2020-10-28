@@ -52,7 +52,7 @@ export default function HomeScreen({navigation}) {
    function addMeal(meal_type){
         setModalVisible(true)
         setCurrentMeal(meal_type)
-        setCurrentStage(2)
+        setCurrentStage(1)
 
    }
 

@@ -15,13 +15,12 @@ import CompForm from './FormComponents/CompForm'
 export default AddModal = () => {
  // const [modalVisible, setModalVisible] = useState(false);
   //const [currentStage, setCurrentStage] = useState(1)
-  const [inputMeal, setinputMeal] = useState('')
   const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
   const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
 
 
   const handleNext = (meal) => {
-    setinputMeal(meal)
+    setCurrentMeal(meal)
     setCurrentStage(currentStage+1)
     console.log(currentStage)
   }
@@ -29,6 +28,11 @@ export default AddModal = () => {
   const handleBack = () => {
     setCurrentStage(currentStage-1)
     console.log(currentStage)
+  }
+
+  const handleClose = () => {
+    setModalVisible(false)
+    setCurrentStage(0)
   }
 
   return (
@@ -43,7 +47,7 @@ export default AddModal = () => {
         <Modal
           backdropOpacity={0.3}
           isVisible={modalVisible}
-          onBackdropPress={() => setModalVisible(false)}
+          onBackdropPress={() => handleClose()}
           style={styles.contentView}
         >
         {currentStage === 0 ? 
@@ -55,34 +59,38 @@ export default AddModal = () => {
             
           </View>
           
-          <View style={styles.constumContentView}>
-            <TouchableOpacity onPress={()=>handleNext('breakfast')} style={styles.buttonStyle}>
-              <Text style={styles.buttonTitle}>Breakfast</Text>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={()=>handleNext('breakfast')}>
+                    <Text style={styles.cardTitle}>Breakfast</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>handleNext('lunch')} style={styles.buttonStyle}>
-              <Text style={styles.buttonTitle}>Lunch</Text>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={()=>handleNext('snack1')}>
+                    <Text style={styles.cardTitle}>Snack</Text>
             </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=>handleNext('comp')} style={styles.buttonStyle}>
-              <Text style={styles.buttonTitle}>Comp</Text>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={()=>handleNext('lunch')}>
+                    <Text style={styles.cardTitle}>Lunch</Text>
             </TouchableOpacity>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={()=>handleNext('comp')}>
+                    <Text style={styles.cardTitle}>Comp</Text>
+            </TouchableOpacity>
+            
 
           </View>
 
-
-        </View>
         : 
-        inputMeal === 'comp' ? 
+        currentMeal === 'comp' ? 
         <CompForm></CompForm>
         :
         <MealForm></MealForm>
       
         
         }
-  
-          
-          
                 
         </Modal>
       </View>
@@ -137,6 +145,20 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
   textStyle:{
-  }
+  },
+  cardTitle: {
+    color: '#404040',
+    fontSize: 20,
+},
+mealCard: {
+    backgroundColor: '#ffffff',
+    marginLeft: 15,
+    marginRight: 15,
+    marginTop: 15,
+    height: 60,
+    borderRadius: 5,
+    alignItems: "center",
+    justifyContent: 'center'
+},
   
 });
