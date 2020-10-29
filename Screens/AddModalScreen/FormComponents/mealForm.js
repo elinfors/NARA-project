@@ -33,41 +33,37 @@ export default MealForm = () => {
     const [ateAt, setAteAt] = useState('')
     const [comment, setComment] = useState('')
     
-    const [favorites, setFavorites] = useState({})
+    const [favorites, setFavorites] = useState(null)
 
     // "HELP-STATES"
     const [commentHelp, setCommentHelp] = useState('')
     const [food, setFood] = useState('')
 
     useEffect(()=>{
+        console.log('favorites',favorites)
         var savedFavRef = firebase.firestore().collection('users').doc(userContext.user.uid)
         .collection('favorites').doc(currentMeal)
         .collection('fooditems')
-        
-        let favList = []
-        savedFavRef.get().then((snapshot) =>{
-            snapshot.docs.forEach(doc =>{
-                let items = doc.data()
-                //items = JSON.stringify(items);
-                favList.push(items.foodItem)
-                //console.log(items.foodItem)
+
+        savedFavRef.onSnapshot(function(querySnapshot){
+            var favList = []
+            querySnapshot.forEach(function(doc){
+                favList.push(doc.data().foodItem)
             })
+            setFavorites(favList)
+
         })
-        setFavorites(favList)
-    }, [handleFav])
+    },[])
 
 
     const handleNext = () => {
         setCurrentStage(currentStage+1)
-        console.log(currentStage)
-        console.log(didEat)
-        console.log(favorites)
+
 
       }
     
     const handleBack = () => {
         setCurrentStage(currentStage-1)
-        console.log(currentStage)
       }
 
     const handleFood = () =>{
@@ -87,28 +83,6 @@ export default MealForm = () => {
     
 
     const handleFav = (sentFood) =>{
-        /*
-        if(favorites.includes(sentFood)){
-            console.log('hehe')
-        }
-        else{
-            let list = favorites
-            list.push(sentFood)
-            setFavorites(list)
-        }
-        console.log(favorites)  
-        
-       var savedFavRef = firebase.firestore().collection('users').doc(userContext.user.uid)
-        .collection('favorites').doc(currentMeal)
-        .collection('fooditems')
-        
-        savedFavRef.get().then((snapshot) =>{
-            snapshot.docs.forEach(doc =>{
-                let items = doc.data()
-                //items = JSON.stringify(items);
-                console.log(items.foodItem)
-            })
-        })*/
 
         var favRef = firebase.firestore().collection('users').doc(userContext.user.uid)
         .collection('favorites').doc(currentMeal).collection('fooditems').doc(sentFood)
@@ -124,18 +98,16 @@ export default MealForm = () => {
     }
 
     const handleIncrease = (sentFood) =>{
-        console.log(sentFood)
         //let obj = foodObj
         foodObj[sentFood] += 1
-        setfoodObj(foodObj)
-        console.log(foodObj)
+        setfoodObj({...foodObj})
+        console.log('food ojbect before increase',foodObj)
     }
     const handleDecrese = (sentFood) =>{
-        console.log(sentFood)
         if(foodObj[sentFood] > 1){
            foodObj[sentFood] -= 1
-           console.log(foodObj) 
-           setfoodObj(foodObj)
+           setfoodObj({...foodObj})
+           console.log('food ojbect before decrease',foodObj)
         }
         else{
             console.log("can't remove")
@@ -177,6 +149,35 @@ export default MealForm = () => {
       }, 1500);
         
     }
+
+    const renderFoodList = (object) =>{
+        return( Object.keys(object).map(food => {
+            
+            return(
+            <View style={styles.listViewItem}>
+                <View style={{justifyContent:'flex-start', flex:1}}>
+                    <Text>{food}</Text>
+                </View>
+
+                <View style={{justifyContent: 'flex-end', flex:1, flexDirection:'row'}}>
+                    <TouchableOpacity onPress={()=>handleDecrese(food)}>
+                        <Ionicons name={'ios-remove-circle-outline'} size={30} color={'black'} />
+                    </TouchableOpacity>
+                    <Text>{object[food]}</Text>
+                    <TouchableOpacity onPress={()=>handleIncrease(food)}>
+                        <Ionicons name={'ios-add-circle-outline'} size={30} color={'black'} />
+                    </TouchableOpacity>
+            
+                    <TouchableOpacity onPress={()=>handleFav(food)}>
+                        <Ionicons name={'ios-heart'} size={30} color={'black'} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+
+        
+        ) 
+        })
+    )}
     
 
       const renderText = (stage) => {
@@ -211,30 +212,8 @@ export default MealForm = () => {
            {/*} <View>
                 <ScrollView>*/}
                     <View style={styles.listView}>
-                        {Object.keys(foodObj).map(food => {return(
-                            <View style={styles.listViewItem}>
-                                <View style={{justifyContent:'flex-start', flex:1}}>
-                                    <Text>{food}</Text>
-                                </View>
-
-                                <View style={{justifyContent: 'flex-end', flex:1, flexDirection:'row'}}>
-                                    <TouchableOpacity onPress={()=>handleDecrese(food)}>
-                                        <Ionicons name={'ios-remove-circle-outline'} size={30} color={'black'} />
-                                    </TouchableOpacity>
-                                    <Text>{foodObj[food]}</Text>
-                                    <TouchableOpacity onPress={()=>handleIncrease(food)}>
-                                        <Ionicons name={'ios-add-circle-outline'} size={30} color={'black'} />
-                                    </TouchableOpacity>
-                            
-                                    <TouchableOpacity onPress={()=>handleFav(food)}>
-                                        <Ionicons name={'ios-heart'} size={30} color={'black'} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-
-                        
-                        ) 
-                    })}</View>
+                        {renderFoodList(foodObj)}
+                    </View>
                     <Text>Favorites</Text>
                     
                     <View style={styles.listView}>
