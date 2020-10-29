@@ -2,15 +2,22 @@ import React, { useState, useContext, useEffect} from 'react';
 import { StyleSheet, View, ScrollView, Button, Text, TouchableOpacity, Image, TextInput, ShadowPropTypesIOS, Animated } from "react-native";
 import { Slider } from 'react-native-elements';
 import Modal from 'react-native-modal';
-import {ModalVisibleContext} from '../../../App'
-import {CurrentMealContext} from '../../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { TouchableHighlight } from 'react-native-gesture-handler';
+import {firebase} from '../../Firebase/config';
+import moment from 'moment';
+
+// CONTEXT
+import {ModalVisibleContext} from '../../../App'
+import {CurrentMealContext} from '../../../App'
+import {CurrentUserContext} from '../../../App'
+
 var plusBtn = require('../../../Components/Images/plusBtn.png')
 
 export default MealForm = () => {
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
     const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
+    const userContext = useContext(CurrentUserContext)
     const [inputMeal, setInputMeal] = useState('')
 
     const feeling = {1: 'Jamie', 2: 'devastated', 3: 'heart broken', 4:'good', 5:'happy'}
@@ -18,7 +25,7 @@ export default MealForm = () => {
 
     // STATES TO SEND TO FIREBASE
     const [didEat, setDidEat] = useState(true)
-    const [foodList , setFoodList] = useState([])
+    //const [foodList , setFoodList] = useState([])
     const [foodObj, setfoodObj] = useState({})
     const [mealTime, setMealTime] = useState('')
     const [feelRate, setFeelRate] = useState(1)
@@ -26,17 +33,36 @@ export default MealForm = () => {
     const [ateAt, setAteAt] = useState('')
     const [comment, setComment] = useState('')
     
-    const [favorites, setFavorites] = useState([])
+    const [favorites, setFavorites] = useState({})
 
     // "HELP-STATES"
     const [commentHelp, setCommentHelp] = useState('')
-    const [food, setFood] = useState()
+    const [food, setFood] = useState('')
+
+    useEffect(()=>{
+        var savedFavRef = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('favorites').doc(currentMeal)
+        .collection('fooditems')
+        
+        let favList = []
+        savedFavRef.get().then((snapshot) =>{
+            snapshot.docs.forEach(doc =>{
+                let items = doc.data()
+                //items = JSON.stringify(items);
+                favList.push(items.foodItem)
+                //console.log(items.foodItem)
+            })
+        })
+        setFavorites(favList)
+    }, [handleFav])
 
 
     const handleNext = () => {
         setCurrentStage(currentStage+1)
         console.log(currentStage)
         console.log(didEat)
+        console.log(favorites)
+
       }
     
     const handleBack = () => {
@@ -45,16 +71,11 @@ export default MealForm = () => {
       }
 
     const handleFood = () =>{
-        /*
-          let list = foodList
-          list.push(food)
-          setFoodList(list)
-          setFood('')
-          console.log(foodList)
-          */
-        foodObj[food] = 1
-        console.log(foodObj)
-        setFood('')
+        if(food != ''){
+            foodObj[food] = 1
+            console.log(foodObj)
+            setFood('')
+        }
       }
 
     const handleComment = () =>{
@@ -66,6 +87,7 @@ export default MealForm = () => {
     
 
     const handleFav = (sentFood) =>{
+        /*
         if(favorites.includes(sentFood)){
             console.log('hehe')
         }
@@ -75,11 +97,37 @@ export default MealForm = () => {
             setFavorites(list)
         }
         console.log(favorites)  
+        
+       var savedFavRef = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('favorites').doc(currentMeal)
+        .collection('fooditems')
+        
+        savedFavRef.get().then((snapshot) =>{
+            snapshot.docs.forEach(doc =>{
+                let items = doc.data()
+                //items = JSON.stringify(items);
+                console.log(items.foodItem)
+            })
+        })*/
+
+        var favRef = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('favorites').doc(currentMeal).collection('fooditems').doc(sentFood)
+        favRef.set({
+            foodItem: sentFood
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
     }
 
     const handleIncrease = (sentFood) =>{
         console.log(sentFood)
+        //let obj = foodObj
         foodObj[sentFood] += 1
+        setfoodObj(foodObj)
         console.log(foodObj)
     }
     const handleDecrese = (sentFood) =>{
@@ -87,6 +135,7 @@ export default MealForm = () => {
         if(foodObj[sentFood] > 1){
            foodObj[sentFood] -= 1
            console.log(foodObj) 
+           setfoodObj(foodObj)
         }
         else{
             console.log("can't remove")
@@ -102,8 +151,32 @@ export default MealForm = () => {
         console.log(ateWith)
         console.log(ateAt)
         console.log(comment)
-    }
 
+        var mealsRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('meals')
+        mealsRef.add({
+            didEat: didEat,
+            mealTime: mealTime,
+            feelRate: feelRate,
+            ateWith: ateWith,
+            ateAt: ateAt,
+            comment: comment,
+            timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm'),
+            food: foodObj,
+            type: currentMeal
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
+
+    setCurrentStage(currentStage+1)
+    setTimeout(() => {
+        setModalVisible(false)
+      }, 1500);
+        
+    }
     
 
       const renderText = (stage) => {
@@ -163,6 +236,7 @@ export default MealForm = () => {
                         ) 
                     })}</View>
                     <Text>Favorites</Text>
+                    
                     <View style={styles.listView}>
                         {favorites.map(item =>{return (
                             <View style={styles.listViewItem}>
@@ -175,7 +249,7 @@ export default MealForm = () => {
                                     </TouchableOpacity>
                                 </View>
 
-                            </View>
+                        </View>
 
                         )})}
                     </View>
@@ -322,6 +396,11 @@ export default MealForm = () => {
                 />
           </>)
         }
+        if(stage === 5){
+            return  (<>
+            <Text>Meal Submitted</Text>
+            </>)
+          }
     }
 
     return(
@@ -351,6 +430,9 @@ export default MealForm = () => {
                     <Text style={styles.buttonTitle}>Submit</Text>
                 </TouchableOpacity>
             </View>
+            :
+            currentStage === 5 ?
+            <View></View>
             :
             /*NEXT BUTTON*/
             <View style={styles.nextBtnView}>
