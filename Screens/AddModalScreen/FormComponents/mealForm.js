@@ -1,11 +1,19 @@
 import React, { useState, useContext, useEffect} from 'react';
-import { StyleSheet, View, ScrollView, Button, Text, TouchableOpacity, Image, TextInput, ShadowPropTypesIOS, Animated } from "react-native";
+import { StyleSheet, View, ScrollView, Button, Text, TouchableOpacity,
+     Image, TextInput, ShadowPropTypesIOS, Animated, 
+     FlatList, Keyboard } from "react-native";
 import { Slider } from 'react-native-elements';
 import Modal from 'react-native-modal';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import { TouchableHighlight, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import {firebase} from '../../Firebase/config';
 import moment from 'moment';
+import styles from './stylesMealForm';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import ProgressBar from './progressBar'
+
+// import copy
+import {didEatCopy, skippedCopy} from './formCopy'
 
 // CONTEXT
 import {ModalVisibleContext} from '../../../App'
@@ -33,11 +41,12 @@ export default MealForm = () => {
     const [ateAt, setAteAt] = useState('')
     const [comment, setComment] = useState('')
     
-    const [favorites, setFavorites] = useState(null)
+    const [favorites, setFavorites] = useState([])
 
     // "HELP-STATES"
     const [commentHelp, setCommentHelp] = useState('')
     const [food, setFood] = useState('')
+    const [eatCopy, setEatCopy] = useState()
 
     useEffect(()=>{
         console.log('favorites',favorites)
@@ -55,16 +64,24 @@ export default MealForm = () => {
         })
     },[])
 
-
     const handleNext = () => {
-        setCurrentStage(currentStage+1)
-
-
+        if(currentStage ===1 && didEat === false){
+            setCurrentStage(currentStage+2)
+        }
+        else{
+            setCurrentStage(currentStage+1)
+        }
       }
     
     const handleBack = () => {
-        setCurrentStage(currentStage-1)
+        if(currentStage === 3 && didEat === false){
+            setCurrentStage(currentStage-2)
+        }
+        else{
+            setCurrentStage(currentStage-1)
+        }   
       }
+    
 
     const handleFood = () =>{
         if(food != ''){
@@ -73,6 +90,16 @@ export default MealForm = () => {
             setFood('')
         }
       }
+    
+    const handleFoodFav = (sentFood) =>{
+        foodObj[sentFood] = 1
+        setfoodObj({...foodObj})
+    }
+
+    const handleRemoveFood = (sentFood) =>{
+        delete foodObj[sentFood]
+        setfoodObj({...foodObj})
+    }
 
     const handleComment = () =>{
         setComment(commentHelp)
@@ -80,20 +107,32 @@ export default MealForm = () => {
         console.log(comment)
     }
 
-    
-
     const handleFav = (sentFood) =>{
+        if(!favorites.includes(sentFood)){
+            var favRef = firebase.firestore().collection('users').doc(userContext.user.uid)
+            .collection('favorites').doc(currentMeal).collection('fooditems').doc(sentFood)
+            favRef.set({
+                foodItem: sentFood
+            })
+            .then(function(){
+                console.log('success')
+            })
+            .catch(function(error){
+                console.log('error: ', error)
+            })
+        }
+        else{
+            handleRemoveFav(sentFood)
+        }
+    }
 
+    const handleRemoveFav = (sentFood) =>{
+        console.log(sentFood)
         var favRef = firebase.firestore().collection('users').doc(userContext.user.uid)
         .collection('favorites').doc(currentMeal).collection('fooditems').doc(sentFood)
-        favRef.set({
-            foodItem: sentFood
-        })
-        .then(function(){
-            console.log('success')
-        })
-        .catch(function(error){
-            console.log('error: ', error)
+
+        favRef.delete().then(function(){
+            console.log('favorite removed')
         })
     }
 
@@ -150,7 +189,11 @@ export default MealForm = () => {
         
     }
 
-    const renderFoodList = (object) =>{
+    const LeftAction = () =>{
+        <View><Text>Remove</Text></View>
+    }
+
+    /*const renderFoodList = (object) =>{
         return( Object.keys(object).map(food => {
             
             return(
@@ -169,7 +212,7 @@ export default MealForm = () => {
                     </TouchableOpacity>
             
                     <TouchableOpacity onPress={()=>handleFav(food)}>
-                        <Ionicons name={'ios-heart'} size={30} color={'black'} />
+                        <Ionicons name={'ios-heart'} size={30} color={favorites.includes(food) ? 'black':'grey'} />
                     </TouchableOpacity>
                 </View>
             </View>
@@ -177,53 +220,89 @@ export default MealForm = () => {
         
         ) 
         })
-    )}
+    )}*/
     
 
       const renderText = (stage) => {
         if (stage === 1) {
            return (<>
+        <View style={styles.didEatView}>
             <Text>Did you eat this meal?</Text>
-            <TouchableOpacity 
-                style={ didEat ? styles.buttonStyle : styles.buttonStyleInactive}
-                onPress={()=>setDidEat(true)}>
-                <Text>YES</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-                style={ didEat ? styles.buttonStyleInactive : styles.buttonStyle}
-                onPress={()=>setDidEat(false)}>
-                <Text>NO</Text>
-            </TouchableOpacity>
+            <View style={styles.stage1BtnView}>
+                <TouchableOpacity 
+                    style={ didEat ? styles.buttonStyleDidEat : styles.buttonStyleInactiveDidEat}
+                    onPress={()=>setDidEat(true)}>
+                    <Text style={didEat ? styles.buttonTitleDidEat : styles.buttonTitleInactiveDidEat}>YES</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={ didEat ? styles.buttonStyleInactiveDidEat : styles.buttonStyleDidEat}
+                    onPress={()=>setDidEat(false)}>
+                    <Text style={didEat ? styles.buttonTitleInactiveDidEat : styles.buttonTitleDidEat}>NO</Text>
+                </TouchableOpacity>
+            </View>
+            </View>
            </>)
         }
         if(stage === 2){
           return  (<>
+          <View style={styles.addFoodView}>
             <TextInput
-                    style={styles.input}
+                    style={styles.foodInput}
                     placeholder='Add Food'
                     placeholderTextColor="#aaaaaa"
                     onChangeText = {text => setFood(text)}
                     onSubmitEditing={()=>handleFood()}
                     value = {food}
                     returnKeyType="next"
-                    autoCapitalize="none"
+                    autoCapitalize="word"
                     autoCorrect={false}
                 />
-           {/*} <View>
-                <ScrollView>*/}
+            <View>
+                <ScrollView style={styles.scrollView}>
+                <Text style={{fontSize:10, marginTop:10}}>{Object.keys(foodObj).length == 0 ? '':'YOU JUST ADDED:' }</Text>
                     <View style={styles.listView}>
-                        {renderFoodList(foodObj)}
+                    {Object.keys(foodObj).map(food => {
+                    return(
+                    <Swipeable renderLeftActions={()=>LeftAction()} onSwipeableLeftOpen={()=>console.log('open')}>
+                    <View style={styles.listViewItem}>
+                        <View style={{justifyContent:'flex-start', flex:1}}>
+                            <Text style={{fontWeight:'600'}}>{food}</Text>
+                        </View>
+
+                        <View style={{justifyContent: 'flex-end', flex:1, flexDirection:'row', alignItems:'center'}}>
+                            <TouchableOpacity style={styles.listIcons} onPress={()=>handleDecrese(food)}>
+                                <Ionicons name={'ios-remove-circle-outline'} size={35} color={'#C4C4C4'} />
+                            </TouchableOpacity>
+                            <Text>{foodObj[food]}</Text>
+                            <TouchableOpacity style={styles.listIcons} onPress={()=>handleIncrease(food)}>
+                                <Ionicons name={'ios-add-circle-outline'} size={35} color={'#C4C4C4'} />
+                            </TouchableOpacity>
+                    
+                            <TouchableOpacity style={styles.listIcons} onPress={()=>handleFav(food)}>
+                                <Ionicons name={'ios-heart'} size={30} color={favorites.includes(food) ? 'black':'#C4C4C4'} />
+                            </TouchableOpacity>
+
+                            <TouchableOpacity style={styles.listIcons} onPress={()=>handleRemoveFood(food)}>
+                                <Ionicons name={'ios-close'} size={30} color={'#C4C4C4'} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                    <Text>Favorites</Text>
+                    </Swipeable>
+                    ) 
+                    })}
+                    </View>
+                    <Text style={{fontSize:10, marginTop:10}}>YOUR FAVORITES:</Text>
                     
                     <View style={styles.listView}>
                         {favorites.map(item =>{return (
                             <View style={styles.listViewItem}>
                                 <View style={{justifyContent:'flex-start', flex:1}}>
-                                    <Text>{item}</Text>
+                                    <TouchableOpacity onPress={()=>handleFoodFav(item)}>
+                                        <Text>{item}</Text>
+                                    </TouchableOpacity>
                                 </View>
                                 <View style={{justifyContent: 'flex-end', flex:1, flexDirection:'row'}}>
-                                    <TouchableOpacity onPress={()=>handleFav(food)}>
+                                    <TouchableOpacity onPress={()=>handleRemoveFav(item)}>
                                         <Ionicons name={'ios-heart'} size={30} color={'black'} />
                                     </TouchableOpacity>
                                 </View>
@@ -232,37 +311,39 @@ export default MealForm = () => {
 
                         )})}
                     </View>
-                {/*</ScrollView>
-            </View>*/}
-        
+                </ScrollView>
+            </View>
+            </View>
           </>)
         }
         if(stage === 3){
           return  (<>
           <View style={{height:'90%'}}>
-          <ScrollView>
           {/* SECTION */}
           <View style={styles.section}>
              {/* HEADLINE */}
             <View style={styles.sectionHeadline}>
-                <Text>When did you eat this meal?</Text>
+                <Text>{didEat === true ? didEatCopy.q1 : skippedCopy.q1}</Text>
             </View>
             {/* SECTION CONTENT (BUTTONS) */}
             <View style={styles.sectionContent}>
                 <TouchableOpacity 
-                        style={mealTime === 'now' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={mealTime === 'now' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setMealTime('now')}>
-                        <Text>I just ate</Text>
+                        <Text style={mealTime === 'now' ? styles.buttonTitle : styles.buttonTitleInactive}>
+                            {didEat === true ? didEatCopy.q1answers.a1 : skippedCopy.q1answers.a1}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={mealTime === 'lessThanHour' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={mealTime === 'lessThanHour' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setMealTime('lessThanHour')}>
-                        <Text>Less than 1 hour ago</Text>
+                        <Text style={mealTime === 'lessThanHour' ? styles.buttonTitle : styles.buttonTitleInactive}>
+                            {didEat === true ? didEatCopy.q1answers.a2 : skippedCopy.q1answers.a2}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={mealTime === 'moreThanHour' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={mealTime === 'moreThanHour' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setMealTime('moreThanHour')}>
-                        <Text>More than 1 hour ago</Text>
+                        <Text style={mealTime === 'moreThanHour' ? styles.buttonTitle : styles.buttonTitleInactive}>
+                            {didEat === true ? didEatCopy.q1answers.a3 : skippedCopy.q1answers.a3}</Text>
                     </TouchableOpacity>
                 </View>
             {/* END SECTION */}
@@ -272,7 +353,7 @@ export default MealForm = () => {
           <View style={styles.section}>
              {/* HEADLINE */}
             <View style={styles.sectionHeadline}>
-                <Text>How are you feeling overall?</Text>
+                <Text>{didEat === true ? didEatCopy.q2 : skippedCopy.q2}</Text>
             </View>
             {/* SECTION CONTENT (SLIDER) */}
             <View style={styles.sectionContent}>
@@ -283,10 +364,10 @@ export default MealForm = () => {
                     maximumValue={5}
                     minimumValue={1}
                     step={1}
-                    trackStyle={{ height: 10, backgroundColor: 'transparent' }}
+                    trackStyle={{ height: 7, backgroundColor: 'transparent' }}
                     thumbStyle={{ height: 20, width: 20, backgroundColor: '#A3C39D' }}
                     />
-                    <Text>Value: {feeling[feelRate.toString()]}</Text>
+                    <Text style={{alignSelf:'center', fontSize:10}}>Value: {feeling[feelRate.toString()]}</Text>
                 </View>
             </View>
             {/* END SECTION */}
@@ -296,29 +377,29 @@ export default MealForm = () => {
           <View style={styles.section}>
              {/* HEADLINE */}
             <View style={styles.sectionHeadline}>
-                <Text>I ate my meal with:</Text>
+                <Text>{didEat === true ? didEatCopy.q3 : skippedCopy.q3}</Text>
             </View>
             {/* SECTION CONTENT (BUTTONS) */}
             <View style={styles.sectionContent}>
                 <TouchableOpacity 
-                        style={ateWith === 'myself' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateWith === 'myself' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteWith('myself')}>
-                        <Text>Myself</Text>
+                        <Text style={ateWith === 'myself' ? styles.buttonTitle : styles.buttonTitleInactive}>Myself</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ateWith === 'friends' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateWith === 'friends' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteWith('friends')}>
-                        <Text>Friends</Text>
+                        <Text style={ateWith === 'friends' ? styles.buttonTitle : styles.buttonTitleInactive}>Friends</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ateWith === 'family' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateWith === 'family' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteWith('family')}>
-                        <Text>Family</Text>
+                        <Text style={ateWith === 'family' ? styles.buttonTitle : styles.buttonTitleInactive}>Family</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ateWith === 'other' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateWith === 'other' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteWith('other')}>
-                        <Text>Other</Text>
+                        <Text style={ateWith === 'other' ? styles.buttonTitle : styles.buttonTitleInactive}>Other</Text>
                     </TouchableOpacity>
                 </View>
             {/* END SECTION */}
@@ -328,56 +409,66 @@ export default MealForm = () => {
           <View style={styles.section}>
              {/* HEADLINE */}
             <View style={styles.sectionHeadline}>
-                <Text>I ate my meal at:</Text>
+                <Text>{didEat === true ? didEatCopy.q4 : skippedCopy.q4}</Text>
             </View>
             {/* SECTION CONTENT (BUTTONS) */}
             <View style={styles.sectionContent}>
                 <TouchableOpacity 
-                        style={ateAt === 'home' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateAt === 'home' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteAt('home')}>
-                        <Text>Home</Text>
+                        <Text style={ateAt === 'home' ? styles.buttonTitle : styles.buttonTitleInactive}>Home</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ateAt === 'school' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateAt === 'school' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteAt('school')}>
-                        <Text>School</Text>
+                        <Text style={ateAt === 'school' ? styles.buttonTitle : styles.buttonTitleInactive}>School</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ateAt === 'work' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateAt === 'work' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteAt('work')}>
-                        <Text>Work</Text>
+                        <Text style={ateAt === 'work' ? styles.buttonTitle : styles.buttonTitleInactive}>Work</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={ateAt === 'other' ? styles.buttonStyle3Active : styles.buttonStyle3}
+                        style={ateAt === 'other' ? styles.buttonStyle : styles.buttonStyleInactive}
                         onPress={()=>setAteAt('other')}>
-                        <Text>Other</Text>
+                        <Text style={ateAt === 'other' ? styles.buttonTitle : styles.buttonTitleInactive}>Other</Text>
                     </TouchableOpacity>
                 </View>
             {/* END SECTION */}
             </View>
 
-            </ScrollView>
             </View>
             </>)
         }
         if(stage === 4){
           return  (<>
+        <View style={styles.commentView}>
+
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <Text>{didEat === true ? didEatCopy.qComment : skippedCopy.qComment}</Text>
           <TextInput
-                    style={styles.input}
-                    placeholder='Add Comment'
+                    style={styles.inputComment}
+                    placeholder={didEat === true ? didEatCopy.placeHolder : skippedCopy.placeHolder}
                     placeholderTextColor="#aaaaaa"
                     onChangeText = {text => setCommentHelp(text)}
                     onSubmitEditing={()=>handleComment()}
                     value = {commentHelp}
-                    returnKeyType="next"
-                    autoCapitalize="none"
+                    returnKeyType="done"
                     autoCorrect={false}
+                    multiline={true}
+                    onSubmitEditing={Keyboard.dismiss}
                 />
+        </TouchableWithoutFeedback>
+        </View>
+
           </>)
         }
         if(stage === 5){
             return  (<>
-            <Text>Meal Submitted</Text>
+            <View style={styles.submitView}>
+                <Text style={{fontSize:17}}>Meal Submitted</Text>
+                <Ionicons name={'ios-checkmark-circle-outline'} size={80} color={'#7CA179'} />
+            </View>
             </>)
           }
     }
@@ -395,8 +486,10 @@ export default MealForm = () => {
                 <Ionicons name={'ios-close'} size={40} color={'black'} />
             </TouchableOpacity>
             </View>
+            <ProgressBar style={{alignSelf:'flex-start'}} props={didEat}></ProgressBar>
 
             <View style={styles.constumContentView}>
+
                 {renderText(currentStage)}
             </View>
 
@@ -404,9 +497,9 @@ export default MealForm = () => {
             {currentStage === 4 ?
             <View style={styles.nextBtnView}>
                 <TouchableOpacity
-                    style={styles.buttonStyle}
+                    style={styles.nextBtn}
                     onPress={()=>handleSubmit()}>
-                    <Text style={styles.buttonTitle}>Submit</Text>
+                    <Text style={styles.nextBtnTitle}>Submit</Text>
                 </TouchableOpacity>
             </View>
             :
@@ -416,9 +509,9 @@ export default MealForm = () => {
             /*NEXT BUTTON*/
             <View style={styles.nextBtnView}>
                 <TouchableOpacity
-                style={styles.buttonStyle}
+                style={styles.nextBtn}
                 onPress={()=>handleNext()}>
-                <Text style={styles.buttonTitle}>Next</Text>
+                <Text style={styles.nextBtnTitle}>Next</Text>
                 </TouchableOpacity>
             </View>
             }
@@ -428,136 +521,3 @@ export default MealForm = () => {
     )
 
 }
-
-const styles = StyleSheet.create({
-    ModalView: {
-      backgroundColor: 'white',
-      padding: 22,
-      //justifyContent: 'center',
-      alignItems: 'stretch',
-      borderTopRightRadius: 17,
-      borderTopLeftRadius: 17,
-      height: '90%'
-    },
-    headlineView:{
-      flex: 1,
-      flexDirection: 'row',
-      justifyContent:'space-between'
-    },
-    constumContentView:{
-      justifyContent: 'center',
-      alignItems: 'center',
-      flex: 1
-    },
-    contentTitle: {
-      fontSize: 20,
-      marginBottom: 12,
-    },
-    contentView: {
-      justifyContent: 'flex-end',
-      margin: 0,
-    },
-    nextBtnView:{
-      justifyContent:'center',
-      alignItems: 'center',
-      flex: 1
-    },
-
-
-    buttonStyle: {
-      backgroundColor: '#7CA179',
-      borderRadius: 50,
-      marginBottom:10,
-      height: 40,
-      width:80,
-      alignItems: "center",
-      justifyContent: 'center'
-    },
-    buttonStyleInactive: {
-        backgroundColor: 'white',
-        borderColor: 'grey',
-        borderRadius: 100,
-        marginBottom:10,
-        height: 40,
-        width:80,
-        alignItems: "center",
-        justifyContent: 'center'
-      },
-    buttonTitle: {
-      color: 'white',
-      fontSize: 16,
-      fontWeight: "bold"
-    },
-    textStyle:{
-    },
-    input: {
-        height: 48,
-        width: 300,
-        borderRadius: 10,
-        overflow: 'hidden',
-        backgroundColor: '#EFEFEF',
-        borderColor: 'grey',
-        marginTop: 10,
-        marginBottom: 10,
-        marginLeft: 30,
-        marginRight: 30,
-        paddingLeft: 16
-    },
-
-    // STAGE 1 - add food
-    listView:{
-        flex:1,
-        flexDirection:'column',
-    },
-    listViewItem:{
-        flex:1,
-        flexDirection:'row',
-        //justifyContent: 'space-between',
-        alignItems: 'center',
-        borderBottomColor: '#C4C4C4',
-        borderBottomWidth: 1,
-        width: '100%'
-    },
-
-    // STAGE 3 - WHAT DID YOU FEEL....
-    section:{
-        borderBottomColor: '#C4C4C4',
-        borderBottomWidth: 1,
-        padding:10
-    },
-    sectionHeadline:{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent:'center',
-        paddingBottom:5
-    },
-    sectionContent:{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent:'space-between',
-        
-    },
-    buttonStyle3:{
-        height: 50,
-        backgroundColor: '#FFFFFF',
-        shadowRadius: 10,
-        shadowColor: 'rgba(0, 0, 0, 0.1)',
-        shadowOffset: {width:0, height:2},
-        borderColor: 'grey',
-        borderWidth: 1,
-        padding:5,
-        borderRadius: 20
-    },
-    buttonStyle3Active:{
-        height: 50,
-        backgroundColor: '#7CA179',
-        shadowRadius: 10,
-        shadowColor: 'rgba(0, 0, 0, 0.1)',
-        shadowOffset: {width:0, height:2},
-        borderColor: 'grey',
-        borderWidth: 1,
-        padding:5,
-        borderRadius: 20
-    }
-    
-  });

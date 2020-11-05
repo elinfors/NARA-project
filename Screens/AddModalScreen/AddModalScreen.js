@@ -111,11 +111,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent:'space-between'
   },
-  constumContentView:{
-    justifyContent: 'center',
-    alignItems: 'center',
-    flex: 1
-  },
+  
   contentTitle: {
     fontSize: 20,
     marginBottom: 12,
