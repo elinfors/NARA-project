@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { StyleSheet, Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { StyleSheet, Image, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native'
 import {firebase} from '../Firebase/config'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CurrentUserContext} from '../../App'
@@ -57,7 +57,9 @@ export default function MealPlan({navigation}) {
             <View style={styles.mealCard}>
                 <View>
               <Text style={styles.mealTitle}>{meal.name}</Text>
-              {console.log(meal.name + meal.active)}
+              </View>
+              <View>
+                  <Text style={styles.mealTitle}>N: {meal.notification.toString()}</Text>
               </View>
               <View>
                   <Text>TIME: {meal.time}</Text></View>
@@ -89,10 +91,10 @@ export default function MealPlan({navigation}) {
             </TouchableOpacity>
             
         </View>
-        <View>
+        <ScrollView>
             <View>{mealPlanList(mealPlan)}
            </View>
-        </View>
+        </ScrollView>
         </>
     )
 };
