@@ -44,9 +44,10 @@ export default function App() {
   const [modalVisible, setModalVisible] = useState(false)
   const [currentMeal, setCurrentMeal] = useState(null)
   const [currentStage, setCurrentStage] = useState(0)
+  const [mealPlan, setMealPlan] = useState([])
 
   //Meal plan context
-  const [mealPlan, setMealPlan] = useState([{name:'Breakfast', time:'07:00'}, {name:'Snack', time:'10.00'},{name:'Lunch', time:'12:00'}, {name: 'Snack', time:'15:00'}, {name:'Dinner', time:'19:00'}, {name:'Snack', time:'21:00'}])
+  //const [mealPlan, setMealPlan] = useState([{name:'Breakfast', time:'07:00'}, {name:'Snack', time:'10.00'},{name:'Lunch', time:'12:00'}, {name: 'Snack', time:'15:00'}, {name:'Dinner', time:'19:00'}, {name:'Snack', time:'21:00'}])
   const [currentMealEdit, setCurrentMealEdit] = useState(null)
 
   // Edit modal context
@@ -107,10 +108,38 @@ export default function App() {
     const subscriber=firebase.auth().onAuthStateChanged((user)=>{  
       setUser(user)
       setInitializing(false)
-      createMealPlan(user)
+      mealPlanExists(user)
     })
     return subscriber
   }
+
+  const mealPlanExists = (user) =>{
+    var mealplanExistsRef = firebase.firestore().collection('users').doc(user.uid)
+    .collection('mealplan')
+
+    mealplanExistsRef.onSnapshot(function(querySnapshot){
+        var mealplanList = []
+        querySnapshot.forEach(function(doc){
+          console.log(doc.data().name)
+            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification})
+        })
+        console.log(mealplanList)
+
+          if(mealplanList.length === 0){
+            return createMealPlan(user)
+          }
+          else{
+            return setMealPlan(mealplanList) 
+            
+          }
+        //setMealPlan(mealplanList)
+       
+
+    })
+
+
+  }
+
   const createMealPlan = (user) =>{
 
           var mealplanRef = firebase.firestore().collection('users').doc(user.uid)
@@ -155,6 +184,43 @@ export default function App() {
         .catch(function(error){
             console.log('error: ', error)
         })
+
+        mealplanRef.add({
+          name:'Snack',
+          time:'16:00',
+          notification: true,
+
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
+        mealplanRef.add({
+          name:'Dinner',
+          time:'19:00',
+          notification: true,
+
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
+        mealplanRef.add({
+          name:'Snack',
+          time:'21:00',
+          notification: true,
+
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
       
 
   
@@ -162,6 +228,7 @@ export default function App() {
 
   useEffect(()=>{
     setSubscriber()
+    console.log(mealPlan)
     
     
 

@@ -1,10 +1,11 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native'
 import {firebase} from '../Firebase/config'
 import styles from './styles'
 import {CurrentUserContext} from '../../App'
 import {ModalVisibleContext} from '../../App'
 import {CurrentMealContext} from '../../App'
+import {MealPlanContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
@@ -14,6 +15,7 @@ export default function HomeScreen({navigation}) {
     const [currentUser, setCurrentUser] = useState(null)
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
     const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
+    const {mealPlan, setMealPlan} = useContext(MealPlanContext)
 
     const [Food, setFood] = useState('')
     const [Mood, setMood] = useState('')
@@ -56,6 +58,17 @@ export default function HomeScreen({navigation}) {
 
    }
 
+   mealPlanList = (mealPlan) => {
+    return mealPlan.map(meal => {
+      return (
+        <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={() => addMeal(meal.name)}>
+                    <Text style={styles.cardTitle}>{meal.name}</Text>
+            </TouchableOpacity>
+      );
+    });
+  };
 
     useEffect(()=>{
         setCurrentUser(userId.user.uid)
@@ -77,8 +90,12 @@ export default function HomeScreen({navigation}) {
 
             
             <Text style={styles.description}>Register today’s meal here! </Text>
+            <ScrollView>
+                <View>{mealPlanList(mealPlan)}
+            </View>
+            </ScrollView>
            
-
+{/*
             <TouchableOpacity
                     style={styles.mealCard}
                     onPress={() => {addMeal('Breakfast')}}>
