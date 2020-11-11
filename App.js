@@ -103,17 +103,68 @@ export default function App() {
     )
   }
 
- 
-  useEffect(()=>{
-    
-      const subscriber=firebase.auth().onAuthStateChanged((user)=>{  
-        setUser(user)
-        setInitializing(false)
-      })
-      //console.log(user)
-      //console.log(user.email)
+  const setSubscriber = () =>{
+    const subscriber=firebase.auth().onAuthStateChanged((user)=>{  
+      setUser(user)
+      setInitializing(false)
+      createMealPlan(user)
+    })
+    return subscriber
+  }
+  const createMealPlan = (user) =>{
 
-      return subscriber
+          var mealplanRef = firebase.firestore().collection('users').doc(user.uid)
+          .collection('mealplan')
+        
+
+          mealplanRef.add({
+          name:'Breakfast',
+          time:'07:00',
+          notification: true,
+
+          })
+          .then(function(){
+              console.log('success')
+          })
+          .catch(function(error){
+              console.log('error: ', error)
+          })
+
+          mealplanRef.add({
+            name:'Snack',
+            time:'11:00',
+            notification: true,
+
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
+
+        mealplanRef.add({
+          name:'Lunch',
+          time:'13:00',
+          notification: true,
+
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
+      
+
+  
+  }
+
+  useEffect(()=>{
+    setSubscriber()
+    
+    
+
     }, [])
 
   if (initializing) return null  //Here you may use an Activity indicator

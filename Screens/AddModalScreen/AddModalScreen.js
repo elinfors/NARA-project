@@ -32,6 +32,7 @@ export default AddModal = () => {
 
   const handleClose = () => {
     setModalVisible(false)
+    console.log('modal visible: ',modalVisible)
     setCurrentStage(0)
   }
 
@@ -54,31 +55,44 @@ export default AddModal = () => {
 
           <View style={styles.headlineView}>
             
-            <Text style={styles.textStyle}>Hi 👋!</Text>
+            <Text style={styles.textStyle}> </Text>
+            <Text style={styles.textStyle}>REGISTER</Text>
+             <TouchableOpacity onPress={()=>handleClose()}>
+                <Ionicons name={'ios-close'} size={40} color={'black'} />
+            </TouchableOpacity>
             
           </View>
-          
+          <View style={styles.constumContentView}>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={()=>handleNext('breakfast')}>
-                    <Text style={styles.cardTitle}>Breakfast</Text>
+                    onPress={()=>handleNext('Breakfast')}>
+                    <Text style={styles.cardTitle}>BREAKFAST</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={()=>handleNext('snack1')}>
-                    <Text style={styles.cardTitle}>Snack</Text>
+                    onPress={()=>handleNext('Snack')}>
+                    <Text style={styles.cardTitle}>SNACK</Text>
+            </TouchableOpacity>
+            </View>
+            <View style={styles.constumContentView}>
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={()=>handleNext('Lunch')}>
+                    <Text style={styles.cardTitle}>LUNCH</Text>
             </TouchableOpacity>
             <TouchableOpacity
                     style={styles.mealCard}
-                    onPress={()=>handleNext('lunch')}>
-                    <Text style={styles.cardTitle}>Lunch</Text>
+                    onPress={()=>handleNext('Dinner')}>
+                    <Text style={styles.cardTitle}>DINNER</Text>
             </TouchableOpacity>
+            </View>
+            <View style={styles.constumContentViewComp}>
             <TouchableOpacity
-                    style={styles.mealCard}
+                    style={styles.mealCardComp}
                     onPress={()=>handleNext('comp')}>
-                    <Text style={styles.cardTitle}>Comp</Text>
+                    <Text style={styles.cardTitle}>COMPENSATION</Text>
             </TouchableOpacity>
-            
+            </View>
 
           </View>
 
@@ -104,7 +118,7 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     borderTopRightRadius: 17,
     borderTopLeftRadius: 17,
-    height: '92%'
+    height: '90%'
   },
   headlineView:{
     flex: 1,
@@ -119,6 +133,24 @@ const styles = StyleSheet.create({
   contentView: {
     justifyContent: 'flex-end',
     margin: 0,
+  },
+  constumContentView:{
+    //alignItems:'center',
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginLeft:20,
+    marginRight:20,
+    marginTop:20,
+  },
+  constumContentViewComp:{
+    //alignItems:'center',
+    flex: 3,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginLeft:30,
+    marginRight:30,
+    marginTop:25,
   },
   nextBtnView:{
     justifyContent:'center',
@@ -142,18 +174,26 @@ const styles = StyleSheet.create({
   textStyle:{
   },
   cardTitle: {
-    color: '#404040',
-    fontSize: 20,
+    color: 'white',
 },
 mealCard: {
-    backgroundColor: '#ffffff',
-    marginLeft: 15,
-    marginRight: 15,
-    marginTop: 15,
-    height: 60,
-    borderRadius: 5,
+    backgroundColor: '#7CA179',
+    padding:15,
+    height: 120,
+    width:120,
+    margin:10,
+    borderRadius: 10,
     alignItems: "center",
     justifyContent: 'center'
+},
+mealCardComp: {
+  backgroundColor: '#7CA179',
+  padding:15,
+  height: 120,
+  width:160,
+  borderRadius: 10,
+  alignItems: "center",
+  justifyContent: 'center'
 },
 plusButton:{
   marginRight:10
