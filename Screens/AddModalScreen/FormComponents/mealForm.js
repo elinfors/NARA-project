@@ -152,6 +152,11 @@ export default MealForm = () => {
             console.log("can't remove")
         }
     }
+    const handleClose = () => {
+        setModalVisible(false)
+        console.log('modal visible: ',modalVisible)
+        setCurrentStage(0)
+      }
 
     const handleSubmit = () =>{
         console.log('SUBMIT:')
@@ -482,7 +487,7 @@ export default MealForm = () => {
                 <Ionicons name={'ios-arrow-back'} size={30} color={'black'} />
             </TouchableOpacity>
             <Text style={styles.textStyle}>{currentMeal} 👋!</Text>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={()=>handleClose()}>
                 <Ionicons name={'ios-close'} size={40} color={'black'} />
             </TouchableOpacity>
             </View>

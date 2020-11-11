@@ -43,7 +43,9 @@ export default function RegistrationScreen({navigation}) {
             .catch((error) => {
                 alert(error)
         });
+
     }
+
 
     return (
         <View style={styles.container}>
