@@ -28,6 +28,15 @@ export default ProgressBar = ({props}) => {
                 </>
             )
         }
+        if (props === 'comp'){
+            return(
+                <>
+                <View style={currentStage > 1 ? styles.DoneRecView : styles.CurrentRecView}/>
+                <View style={currentStage > 2 ? styles.DoneRecView : currentStage === 2?styles.CurrentRecView : styles.UndoneRecView}/>
+                <View style={currentStage < 3 ? styles.UndoneRecView : styles.CurrentRecView}/>
+                </>
+            )
+        }
         else{
             return null
         }

@@ -105,6 +105,7 @@ export default MealForm = () => {
         setComment(commentHelp)
         //setCommentHelp('')
         console.log(comment)
+        Keyboard.dismiss()
     }
 
     const handleFav = (sentFood) =>{
@@ -461,7 +462,6 @@ export default MealForm = () => {
                     returnKeyType="done"
                     autoCorrect={false}
                     multiline={true}
-                    onSubmitEditing={Keyboard.dismiss}
                 />
         </TouchableWithoutFeedback>
         </View>
