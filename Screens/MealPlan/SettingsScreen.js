@@ -1,16 +1,44 @@
 import React, { useState, useContext} from 'react';
 import { StyleSheet, View, Button, Text, TouchableOpacity, Image } from "react-native";
 import Modal from 'react-native-modal';
+import {firebase} from '../Firebase/config'
 import {MealPlanContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {CurrentUserContext} from '../../App'
 import {Picker} from '@react-native-picker/picker';
+import {EditModalContext} from '../../App'
 
 
 export default SettingsScreen = () => {
     const {currentMealEdit, setCurrentMealEdit} = useContext(MealPlanContext)
-    const [hour, setHour] = useState('07')
-    const [minute, setMinute] = useState('07')
+    const userContext = useContext(CurrentUserContext)
+    const {editModalVisible, setEditModalVisible} = useContext(EditModalContext)
+    const [hour, setHour] = useState(currentMealEdit.time.substr(0,2))
+    const [minute, setMinute] = useState(currentMealEdit.time.substr(3,4))
+    const [notice, setNotice] = useState(currentMealEdit.notification)
     var name = currentMealEdit.name.toUpperCase();
+
+    const handleSubmit = () =>{
+        var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan').doc(currentMealEdit.id)
+
+        mealRef.set({
+            name: currentMealEdit.name,
+            time: hour + ":"+ minute,
+            notification: notice, 
+            id: currentMealEdit.id
+        })
+        .then(function(){
+            console.log('success')
+        })
+        .catch(function(error){
+            console.log('error: ', error)
+        })
+
+    setTimeout(() => {
+        setEditModalVisible(false)
+      }, 1500);
+
+    }
 
     return(
         <>
@@ -75,6 +103,13 @@ export default SettingsScreen = () => {
                     <Text>Notification</Text>
                 </View>
 
+                <View>
+                <TouchableOpacity
+                    style={styles.nextBtn}
+                    onPress={()=>handleSubmit()}>
+                    <Text style={styles.nextBtnTitle}>SAVE</Text>
+                </TouchableOpacity>
+                </View>
 
 
             </View>
@@ -129,7 +164,21 @@ const styles = StyleSheet.create({
         justifyContent:'center'
 
 
-      }
+      },
+      nextBtn:{
+        backgroundColor: '#7CA179',
+        borderRadius: 5,
+        height: 40,
+        width:150,
+        alignItems: "center",
+        justifyContent: 'center',
+        shadowColor: 'rgba(0, 0, 0, 0.1)',
+        shadowOpacity: 0.8,
+        elevation: 6,
+        shadowRadius: 15 ,
+        shadowOffset : { width: 1, height: 13},
+        marginHorizontal: 10,
+      },
     
   });
 
