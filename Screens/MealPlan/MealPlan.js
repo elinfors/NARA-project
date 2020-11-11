@@ -48,6 +48,12 @@ export default function MealPlan({navigation}) {
     }
 
     mealPlanList = (mealPlan) => {
+        
+        mealPlan.sort((a, b) => (a.time.substr(0,2) > b.time.substr(0,2)) ? 1 
+        : (a.time.substr(0,2) === b.time.substr(0,2)) 
+        ? ((a.time.substr(3,4) > b.time.substr(3,4)) 
+        ? 1 : -1) : -1)
+
         return mealPlan.map(meal => {
           return (
             <TouchableOpacity

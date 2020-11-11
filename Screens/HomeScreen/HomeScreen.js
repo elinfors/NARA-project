@@ -59,7 +59,15 @@ export default function HomeScreen({navigation}) {
    }
 
    mealPlanList = (mealPlan) => {
+    mealPlan.sort((a, b) => (a.time.substr(0,2) > b.time.substr(0,2)) ? 1 
+        : (a.time.substr(0,2) === b.time.substr(0,2)) 
+        ? ((a.time.substr(3,4) > b.time.substr(3,4)) 
+        ? 1 : -1) : -1)
+    //(a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 )
+  
     return mealPlan.map(meal => {
+        console.log("mealtime", meal.time.substr(0,2))
+        console.log("mealtime", meal.time.substr(3,4))
       return (
         <TouchableOpacity
                     style={styles.mealCard}
@@ -72,6 +80,7 @@ export default function HomeScreen({navigation}) {
 
     useEffect(()=>{
         setCurrentUser(userId.user.uid)
+        setMealPlan(mealPlan)
         console.log(currentUser)
     }, [])
 
@@ -126,21 +135,7 @@ export default function HomeScreen({navigation}) {
                     onPress={() => {addMeal('Evening snack')}}>
                     <Text style={styles.cardTitle}>Evening snack</Text>
             </TouchableOpacity>
-            {/*}
-                <TextInput
-                    style={styles.input}
-                    placeholder='Mood'
-                    placeholderTextColor="#aaaaaa"
-                    onChangeText={(text) => setMood(text)}
-                    value={Mood}
-                    underlineColorAndroid="transparent"
-                    autoCapitalize="none"
-                />
-                <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => onAddLogg()}>
-                    <Text style={styles.buttonTitle}>Add</Text>
-                </TouchableOpacity>
+
     */}
 
         </View>

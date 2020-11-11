@@ -57,6 +57,11 @@ export default function App() {
   function toggleVisible () {
     setModalVisible(visible => !visible);
   }
+
+  useEffect(()=>{
+    setMealPlan(mealPlan)
+  
+},[])
   
   mealPlanStack = () =>{
     return(
@@ -121,7 +126,7 @@ export default function App() {
         var mealplanList = []
         querySnapshot.forEach(function(doc){
           console.log(doc.data().name)
-            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification})
+            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification, id: doc.data().id})
         })
         console.log(mealplanList)
 
@@ -146,10 +151,11 @@ export default function App() {
           .collection('mealplan')
         
 
-          mealplanRef.add({
+          mealplanRef.doc('Breakfast').set({
           name:'Breakfast',
           time:'07:00',
           notification: true,
+          id: 'Breakfast'
 
           })
           .then(function(){
@@ -159,10 +165,11 @@ export default function App() {
               console.log('error: ', error)
           })
 
-          mealplanRef.add({
+          mealplanRef.doc("Snack1").set({
             name:'Snack',
             time:'11:00',
             notification: true,
+            id: "Snack1"
 
         })
         .then(function(){
@@ -172,10 +179,11 @@ export default function App() {
             console.log('error: ', error)
         })
 
-        mealplanRef.add({
+        mealplanRef.doc("Lunch").set({
           name:'Lunch',
           time:'13:00',
           notification: true,
+          id: "Lunch"
 
         })
         .then(function(){
@@ -185,10 +193,11 @@ export default function App() {
             console.log('error: ', error)
         })
 
-        mealplanRef.add({
+        mealplanRef.doc("Snack2").set({
           name:'Snack',
           time:'16:00',
           notification: true,
+          id: "Snack2"
 
         })
         .then(function(){
@@ -197,10 +206,11 @@ export default function App() {
         .catch(function(error){
             console.log('error: ', error)
         })
-        mealplanRef.add({
+        mealplanRef.doc("Dinner").set({
           name:'Dinner',
           time:'19:00',
           notification: true,
+          id: "Dinner"
 
         })
         .then(function(){
@@ -209,10 +219,11 @@ export default function App() {
         .catch(function(error){
             console.log('error: ', error)
         })
-        mealplanRef.add({
+        mealplanRef.doc("Snack3").set({
           name:'Snack',
           time:'21:00',
           notification: true,
+          id: "Snack3"
 
         })
         .then(function(){
