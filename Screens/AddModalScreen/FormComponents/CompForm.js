@@ -39,8 +39,17 @@ export default CompForm = () => {
 
 
     const handleNext = () => {
-        setCurrentStage(currentStage+1)
+        if(currentStage === 1 && compType === ''){
+            alert('Please fill out how you compensated')
+        }
+        else if(currentStage === 2 && (compTime === '' ||feelRate === '' ||compWith === '' ||compAt === '')){
+            alert('You need to fill out all the questions')
+        }
+        else{
+            setCurrentStage(currentStage+1)
+        }
     }
+
     
     const handleBack = () => {
         setCurrentStage(currentStage-1)
