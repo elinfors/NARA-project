@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { Image, Text, TextInput, TouchableOpacity, View, ScrollView } from 'react-native'
+import { Image, Text, TextInput, TouchableOpacity, View, ScrollView} from 'react-native'
 import {firebase} from '../Firebase/config'
 import styles from './styles'
 import {CurrentUserContext} from '../../App'

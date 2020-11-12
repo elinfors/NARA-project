@@ -1,5 +1,5 @@
 import React, { useState, useContext} from 'react';
-import { StyleSheet, View, Button, Text, TouchableOpacity, Image } from "react-native";
+import { StyleSheet, View, Button, Text, TouchableOpacity, Image, Switch } from "react-native";
 import Modal from 'react-native-modal';
 import {firebase} from '../Firebase/config'
 import {MealPlanContext} from '../../App'
@@ -16,7 +16,17 @@ export default SettingsScreen = () => {
     const [hour, setHour] = useState(currentMealEdit.time.substr(0,2))
     const [minute, setMinute] = useState(currentMealEdit.time.substr(3,4))
     const [notice, setNotice] = useState(currentMealEdit.notification)
+    
+    const [isEnabled, setIsEnabled] = useState(currentMealEdit.notification);
+   
+
+
     var name = currentMealEdit.name.toUpperCase();
+
+    const toggleSwitch = () => {
+        setIsEnabled(!isEnabled);
+        console.log("notification ", isEnabled)
+    }
 
     const handleSubmit = () =>{
         var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan').doc(currentMealEdit.id)
@@ -24,7 +34,7 @@ export default SettingsScreen = () => {
         mealRef.set({
             name: currentMealEdit.name,
             time: hour + ":"+ minute,
-            notification: notice, 
+            notification: isEnabled, 
             id: currentMealEdit.id
         })
         .then(function(){
@@ -105,6 +115,15 @@ export default SettingsScreen = () => {
                 <View style={styles.setting}>
                     <Text>Notification to register meal</Text>
                 </View>
+                <View style={styles.switch}>
+                    <Switch
+                        trackColor='#ffffff'
+                        thumbColor={isEnabled ? "#f4f3f4" : "#ffffff"}
+                        ios_backgroundColor="#e2e2e2"
+                        onValueChange={toggleSwitch}
+                        value={isEnabled}
+                    />
+                </View>
 
                
                 <View style={styles.setting}>
@@ -162,6 +181,11 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         alignSelf:'center',
         justifyContent:'flex-start'
+      },
+      switch: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center"
       },
       nextBtn:{
         backgroundColor: '#7CA179',
