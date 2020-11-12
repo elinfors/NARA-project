@@ -65,13 +65,27 @@ export default MealForm = () => {
     },[])
 
     const handleNext = () => {
+        if(currentStage === 2 && (Object.keys(foodObj).length === 0)){
+            alert('You need to add something to your meal. If you skipped this meal - go back and choose "no"')
+        }
+ 
+        else if(currentStage === 3 && (mealTime === '' || feelRate ===''|| ateAt ===''|| ateWith ==='')){
+            alert('You need to fill out all the questions')
+        }
+        else{
+            handleGoToNext()
+        }
+    }
+
+    
+    const handleGoToNext = () =>{
         if(currentStage ===1 && didEat === false){
             setCurrentStage(currentStage+2)
         }
         else{
             setCurrentStage(currentStage+1)
         }
-      }
+    }
     
     const handleBack = () => {
         if(currentStage === 3 && didEat === false){
