@@ -125,10 +125,8 @@ export default function App() {
     mealplanExistsRef.onSnapshot(function(querySnapshot){
         var mealplanList = []
         querySnapshot.forEach(function(doc){
-          console.log(doc.data().name)
             mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification, id: doc.data().id})
         })
-        console.log(mealplanList)
 
           if(mealplanList.length === 0){
             return createMealPlan(user)
@@ -239,7 +237,6 @@ export default function App() {
 
   useEffect(()=>{
     setSubscriber()
-    console.log(mealPlan)
     
     
 

@@ -49,7 +49,6 @@ export default MealForm = () => {
     const [eatCopy, setEatCopy] = useState()
 
     useEffect(()=>{
-        console.log('favorites',favorites)
         var savedFavRef = firebase.firestore().collection('users').doc(userContext.user.uid)
         .collection('favorites').doc(currentMeal)
         .collection('fooditems')
@@ -100,7 +99,6 @@ export default MealForm = () => {
     const handleFood = () =>{
         if(food != ''){
             foodObj[food] = 1
-            console.log(foodObj)
             setFood('')
         }
       }
@@ -118,7 +116,6 @@ export default MealForm = () => {
     const handleComment = () =>{
         setComment(commentHelp)
         //setCommentHelp('')
-        console.log(comment)
         Keyboard.dismiss()
     }
 
@@ -142,7 +139,6 @@ export default MealForm = () => {
     }
 
     const handleRemoveFav = (sentFood) =>{
-        console.log(sentFood)
         var favRef = firebase.firestore().collection('users').doc(userContext.user.uid)
         .collection('favorites').doc(currentMeal).collection('fooditems').doc(sentFood)
 
@@ -161,7 +157,6 @@ export default MealForm = () => {
         if(foodObj[sentFood] > 1){
            foodObj[sentFood] -= 1
            setfoodObj({...foodObj})
-           console.log('food ojbect before decrease',foodObj)
         }
         else{
             console.log("can't remove")
@@ -169,19 +164,11 @@ export default MealForm = () => {
     }
     const handleClose = () => {
         setModalVisible(false)
-        console.log('modal visible: ',modalVisible)
         setCurrentStage(0)
       }
 
     const handleSubmit = () =>{
-        console.log('SUBMIT:')
-        console.log(didEat)
-        //console.log(foodList)
-        console.log(mealTime)
-        console.log(feelRate)
-        console.log(ateWith)
-        console.log(ateAt)
-        console.log(comment)
+ 
 
         var mealsRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('meals')
         mealsRef.add({
@@ -192,6 +179,7 @@ export default MealForm = () => {
             ateAt: ateAt,
             comment: comment,
             timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm'),
+            date: moment().utcOffset('+01:00').format('YYYY-MM-DD'),
             food: foodObj,
             type: currentMeal
         })
