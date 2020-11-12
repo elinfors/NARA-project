@@ -54,7 +54,7 @@ export default SettingsScreen = () => {
                     <Text style={styles.mealTitle}>{name}</Text> 
                 </View>
                 <View style={styles.timeNotice}>
-                    <Text>Time for meal</Text>
+                    <Text>At what time would you like to eat?</Text>
                     <View style={styles.pickers}>
                     <Picker
                     selectedValue={hour}
@@ -100,7 +100,7 @@ export default SettingsScreen = () => {
                     </View>
                 </View>
                 <View style={styles.timeNotice}>
-                    <Text>Notification</Text>
+                    <Text>Notification to register meal</Text>
                 </View>
 
                 <View>

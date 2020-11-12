@@ -72,7 +72,7 @@ export default function HomeScreen({navigation}) {
         <TouchableOpacity
                     style={styles.mealCard}
                     onPress={() => addMeal(meal.name)}>
-                    <Text style={styles.cardTitle}>{meal.name}</Text>
+                    <Text style={styles.cardTitle}>ADD {meal.name.toUpperCase()}</Text>
             </TouchableOpacity>
       );
     });
