@@ -53,12 +53,15 @@ export default SettingsScreen = () => {
                 <View style={styles.mealText}>  
                     <Text style={styles.mealTitle}>{name}</Text> 
                 </View>
-                <View style={styles.timeNotice}>
+                
+                <View style={styles.setting}>
                     <Text>At what time would you like to eat?</Text>
-                    <View style={styles.pickers}>
+                </View>
+                    
+                <View style={styles.pickers}>
                     <Picker
                     selectedValue={hour}
-                    style={{height: 50, width: 100}}
+                    style={{height: 40, width: 100}}
                     onValueChange={(itemValue, itemIndex) =>
                        setHour(itemValue)
                     }>
@@ -88,7 +91,7 @@ export default SettingsScreen = () => {
                     </Picker>
                     <Picker
                     selectedValue={minute}
-                    style={{height: 50, width: 200}}
+                    style={{height: 40, width: 100}}
                     onValueChange={(itemValue, itemIndex) =>
                        setMinute(itemValue)
                     }>
@@ -97,13 +100,14 @@ export default SettingsScreen = () => {
                     <Picker.Item label="30" value="30" />
                     <Picker.Item label="45" value="45" />
                     </Picker>
-                    </View>
                 </View>
-                <View style={styles.timeNotice}>
+              
+                <View style={styles.setting}>
                     <Text>Notification to register meal</Text>
                 </View>
 
-                <View>
+               
+                <View style={styles.setting}>
                 <TouchableOpacity
                     style={styles.nextBtn}
                     onPress={()=>handleSubmit()}>
@@ -141,29 +145,23 @@ const styles = StyleSheet.create({
           fontSize:15
       },
       mealText:{
-        flex:1,
+        flex:2,
         justifyContent: 'center',
         alignItems:'center',
-        marginBottom: 50,
-
-      },
-      timeNotice:{
-          padding:22,
-        flex:1,
-        justifyContent: 'flex-start',
-        alignItems:'flex-start',
-        alignContent:'flex-start'
 
       },
       mealTitle:{
         fontSize:20,
       },
+      setting:{
+            flex:2,
+            alignItems:'center'
+      },
       pickers:{
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent:'center'
-
-
+        flex:3,
+        flexDirection:'row',
+        alignSelf:'center',
+        justifyContent:'flex-start'
       },
       nextBtn:{
         backgroundColor: '#7CA179',
@@ -181,7 +179,6 @@ const styles = StyleSheet.create({
       },
     
   });
-
 
 
 

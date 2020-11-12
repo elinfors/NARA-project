@@ -36,6 +36,10 @@ export default StyleSheet.create({
         color: '#404040',
         fontSize: 20,
     },
+    cardTitleDone: {
+        color: 'white',
+        fontSize: 20,
+    },
     mealCard: {
         backgroundColor: '#ffffff',
         marginLeft: 15,
@@ -45,6 +49,17 @@ export default StyleSheet.create({
         borderRadius: 5,
         alignItems: "center",
         justifyContent: 'center'
+    },
+    mealCardDone: {
+        backgroundColor: '#7ca179',
+        marginLeft: 15,
+        marginRight: 15,
+        marginTop: 15,
+        height: 60,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: 'center',
+        
     },
     description: {
         textAlign: 'center',

@@ -7,6 +7,7 @@ import {ModalVisibleContext} from '../../App'
 import {CurrentMealContext} from '../../App'
 import {MealPlanContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import moment from 'moment';
 
 
 
@@ -16,15 +17,20 @@ export default function HomeScreen({navigation}) {
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
     const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)
     const {mealPlan, setMealPlan} = useContext(MealPlanContext)
+    const userContext = useContext(CurrentUserContext)
 
-    const [Food, setFood] = useState('')
-    const [Mood, setMood] = useState('')
+
+    //const [Food, setFood] = useState('')
+    //const [Mood, setMood] = useState('')
+
+    const [todayMeals, setTodayMeals] = useState([])
 
 
     //const userId = props.extraData.uid
     const userId = useContext(CurrentUserContext)
     //console.log(userId)
 
+/*
 
     const onAddLogg = () => {
         const usersRef = firebase.firestore().collection('users')
@@ -34,28 +40,37 @@ export default function HomeScreen({navigation}) {
             mood: Mood
         })
     }
-/*
-    const addMeals = ()=>{
-    const meals = []
-    var usersRef = firebase.firestore().collection('users').doc(userId).collection('meal')
-    usersRef.get()
-    .then(snapshot => {
-        snapshot.forEach(doc => {
-
-           meals.push(doc.data().mood)
-           console.log(meals)
-        });
-    })
-    .catch(err => {
-        console.log('Error getting documents', err);
-    }); 
-    }
     */
+
+    useEffect(()=>{
+        var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('meals')
+
+        allMeals.onSnapshot(function(querySnapshot){
+            var mealList = []
+            querySnapshot.forEach(function(doc){
+                if(doc.data().date === moment().utcOffset('+01:00').format('YYYY-MM-DD')){
+                    mealList.push(doc.data().type)
+                }
+            })
+            setTodayMeals(mealList)
+        })
+    },[])
+
    function addMeal(meal_type){
         setModalVisible(true)
         setCurrentMeal(meal_type)
         setCurrentStage(1)
 
+   }
+
+   const mealDone = (mealType) =>{
+        if(todayMeals.includes(mealType)){
+            return true
+        }
+        else{
+            return false
+        }
    }
 
    mealPlanList = (mealPlan) => {
@@ -66,13 +81,11 @@ export default function HomeScreen({navigation}) {
     //(a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 )
   
     return mealPlan.map(meal => {
-        console.log("mealtime", meal.time.substr(0,2))
-        console.log("mealtime", meal.time.substr(3,4))
       return (
         <TouchableOpacity
-                    style={styles.mealCard}
-                    onPress={() => addMeal(meal.name)}>
-                    <Text style={styles.cardTitle}>ADD {meal.name.toUpperCase()}</Text>
+                    style={ mealDone(meal.id) ? styles.mealCardDone:styles.mealCard}
+                    onPress={() => addMeal(meal.id)}>
+                    <Text style={ mealDone(meal.id) ? styles.cardTitleDone:styles.cardTitle}>{ mealDone(meal.id)? '':'ADD '} {meal.name.toUpperCase()}</Text>
             </TouchableOpacity>
       );
     });
@@ -81,7 +94,6 @@ export default function HomeScreen({navigation}) {
     useEffect(()=>{
         setCurrentUser(userId.user.uid)
         setMealPlan(mealPlan)
-        console.log(currentUser)
     }, [])
 
     return (
