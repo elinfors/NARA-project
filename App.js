@@ -83,11 +83,15 @@ export default function App() {
               iconName = focused
                 ? 'ios-home'
                 : 'ios-home';
-            } else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-list-box' : 'ios-list';
-            }
+            } 
             else if (route.name === 'Meal Plan'){
               iconName = focused ? 'ios-create' : 'ios-create';
+            }
+            else if (route.name === 'Overview'){
+              iconName = focused ? 'ios-stats-chart' : 'ios-stats-chart';
+            }
+            else if (route.name === 'Settings') {
+              iconName = focused ? 'ios-settings' : 'ios-settings';
             }
             // You can return any component that you like here!
             return <Ionicons name={iconName} size={size} color={color} />;
@@ -104,6 +108,9 @@ export default function App() {
         tabBarButton: ()=>(<EditMealPlan/>),}}/>
         <Tab.Screen name = 'Add' component = {AddModalComponent} options = {{
           tabBarButton: ()=>(<AddModal/>),}}/>
+        <Tab.Screen name = 'Overview' component = {HomeScreen}/>
+        <Tab.Screen name = 'Settings' component = {HomeScreen}/>
+
 
       </Tab.Navigator>
     )

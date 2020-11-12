@@ -65,6 +65,11 @@ export default CompForm = () => {
         Keyboard.dismiss()
     }
 
+    const handleClose = () => {
+        setModalVisible(false)
+        setCurrentStage(0)
+      }
+
     const handleSubmit = () =>{
         console.log('SUBMIT:')
 
