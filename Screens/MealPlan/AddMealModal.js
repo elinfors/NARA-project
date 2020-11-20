@@ -6,22 +6,21 @@ import {MealPlanContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {CurrentUserContext} from '../../App'
 import {Picker} from '@react-native-picker/picker';
-import {EditModalContext} from '../../App'
+import {AddMealplanContext} from '../../App'
 
 
-export default SettingsScreen = () => {
+export default AddMealModal = () => {
     const {currentMealEdit, setCurrentMealEdit} = useContext(MealPlanContext)
     const userContext = useContext(CurrentUserContext)
-    const {editModalVisible, setEditModalVisible} = useContext(EditModalContext)
-    const [hour, setHour] = useState(currentMealEdit.time.substr(0,2))
-    const [minute, setMinute] = useState(currentMealEdit.time.substr(3,4))
-    const [reminderHour, setReminderHour] = useState(currentMealEdit.notificationTime.substr(0))
-    const [reminderMinute, setReminderMinute] = useState(currentMealEdit.notificationTime.substr(2,3))
-    const [isEnabled, setIsEnabled] = useState(currentMealEdit.notification);
-   
-
-
-    var name = currentMealEdit.name.toUpperCase();
+    const {addModalVisible, setAddModalVisible} = useContext(AddMealplanContext)
+    const [mealType, setMealType] = useState(null)
+    const [hour, setHour] = useState("00")
+    const [minute, setMinute] = useState("00")
+    const [reminderHour, setReminderHour] = useState("0")
+    const [reminderMinute, setReminderMinute] = useState("00")
+    const [isEnabled, setIsEnabled] = useState(false);
+    const [id, setId] = useState(null)
+   const [plan, setPlan] = useState([])
 
     const toggleSwitch = () => {
         setIsEnabled(!isEnabled);
@@ -29,14 +28,14 @@ export default SettingsScreen = () => {
     }
 
     const handleSubmit = () =>{
-        var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan').doc(currentMealEdit.id)
+        var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan')
 
-        mealRef.set({
-            name: currentMealEdit.name,
+        mealRef.doc(mealType).set({
+            name: mealType,
             time: hour + ":"+ minute,
             notification: isEnabled, 
             notificationTime: reminderHour + ":" + reminderMinute,
-            id: currentMealEdit.id
+            id: mealType
         })
         .then(function(){
             console.log('success')
@@ -46,25 +45,29 @@ export default SettingsScreen = () => {
         })
 
     setTimeout(() => {
-        setEditModalVisible(false)
+        setAddModalVisible(false)
       }, 1000);
 
     }
 
-    const handleRemove = () =>{
-        var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan').doc(currentMealEdit.id)
-        mealRef.delete().then(function(){
-            alert(currentMealEdit.name + " removed from meal plan")
-            setTimeout(() => {
-                setEditModalVisible(false)
-              }, 2000);
-        })
-    }
 
     const handleClose = () => {
-        setEditModalVisible(false)
+        setAddModalVisible(false)
       }
 
+      useEffect(()=>{
+        
+        var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan')
+        mealRef.onSnapshot(function(querySnapshot){
+            var idList = []
+            querySnapshot.forEach(function(doc){
+                    idList.push(doc.data().id)
+            })
+            setPlan(idList)
+            console.log(plan)
+        })
+
+    },[])
 
 
     return(

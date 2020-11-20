@@ -64,7 +64,12 @@ export default StyleSheet.create({
     description: {
         textAlign: 'center',
         margin:20,
-        fontSize: 20
+        fontSize: 20,
+        color: '#ffffff'
+    },
+    headlineBackground:{
+        backgroundColor:'#7ca179'
+
     },
     dayBanner:{
         flexDirection: 'row',
