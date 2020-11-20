@@ -98,19 +98,10 @@ export default function HomeScreen({navigation}) {
 
     return (
         <View>
-            <View style={styles.dayBanner}>
-                <TouchableOpacity>
-                    <Ionicons name={'ios-arrow-back'} size={30} color={'white'} />
-                </TouchableOpacity>
-                <Text style={styles.headline}>TODAY</Text>
-                <TouchableOpacity>
-                    <Ionicons name={'ios-arrow-forward'} size={30} color={'white'} />
-                </TouchableOpacity>
 
+            <View style={styles.headlineBackground}>
+            <Text style={styles.description}>Register today’s meals here! </Text>
             </View>
-
-            
-            <Text style={styles.description}>Register today’s meal here! </Text>
             <ScrollView>
                 <View>{mealPlanList(mealPlan)}
             </View>

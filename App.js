@@ -24,6 +24,7 @@ export const ModalVisibleContext = createContext();
 export const CurrentMealContext = createContext();
 export const MealPlanContext = createContext();
 export const EditModalContext = createContext();
+export const AddMealplanContext = createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -52,6 +53,7 @@ export default function App() {
 
   // Edit modal context
   const [editModalVisible, setEditModalVisible] = useState(false)
+  const [addModalVisible, setAddModalVisible] = useState(false)
 
   
   function toggleVisible () {
@@ -132,7 +134,7 @@ export default function App() {
     mealplanExistsRef.onSnapshot(function(querySnapshot){
         var mealplanList = []
         querySnapshot.forEach(function(doc){
-            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification, id: doc.data().id})
+            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification, id: doc.data().id, notificationTime:doc.data().notificationTime})
         })
 
           if(mealplanList.length === 0){
@@ -160,6 +162,7 @@ export default function App() {
           name:'Breakfast',
           time:'07:00',
           notification: true,
+          notificationTime: '0:15',
           id: 'Breakfast'
 
           })
@@ -174,6 +177,7 @@ export default function App() {
             name:'Snack',
             time:'11:00',
             notification: true,
+            notificationTime: '0:15',
             id: "Snack1"
 
         })
@@ -188,6 +192,7 @@ export default function App() {
           name:'Lunch',
           time:'13:00',
           notification: true,
+          notificationTime: '0:15',
           id: "Lunch"
 
         })
@@ -202,6 +207,7 @@ export default function App() {
           name:'Snack',
           time:'16:00',
           notification: true,
+          notificationTime: '0:15',
           id: "Snack2"
 
         })
@@ -215,6 +221,7 @@ export default function App() {
           name:'Dinner',
           time:'19:00',
           notification: true,
+          notificationTime: '0:15',
           id: "Dinner"
 
         })
@@ -228,6 +235,7 @@ export default function App() {
           name:'Snack',
           time:'21:00',
           notification: true,
+          notificationTime: '0:15',
           id: "Snack3"
 
         })
@@ -256,11 +264,12 @@ export default function App() {
       <ModalVisibleContext.Provider value={{modalVisible, setModalVisible, toggleVisible}}>
         <CurrentMealContext.Provider value={{currentMeal, setCurrentMeal, currentStage, setCurrentStage}}>
           <EditModalContext.Provider value={{editModalVisible, setEditModalVisible}}>
+            <AddMealplanContext.Provider value ={{addModalVisible, setAddModalVisible}}>
             <MealPlanContext.Provider value={{mealPlan, setMealPlan, currentMealEdit, setCurrentMealEdit}}>
               <NavigationContainer>
                 <Stack.Navigator>
                   {user ? (
-                    <Stack.Screen name="Home" children={createBottomTabs}>
+                    <Stack.Screen name="Today" children={createBottomTabs}>
                     {/*{props => <HomeScreen {...props} extraData={user} />}*/}
                     </Stack.Screen>
                   ) : (
@@ -272,6 +281,7 @@ export default function App() {
                   </Stack.Navigator>
               </NavigationContainer>
             </MealPlanContext.Provider>
+            </AddMealplanContext.Provider>
           </EditModalContext.Provider>
         </CurrentMealContext.Provider>
       </ModalVisibleContext.Provider>
