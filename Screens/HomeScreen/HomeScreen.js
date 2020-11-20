@@ -31,6 +31,7 @@ export default function HomeScreen({navigation}) {
     const [todayMealsList, setTodayMealsList] = useState([])
     const [todayMealsObj, setTodayMealsObj] = useState({})
     const [extraSnack, setExtraSnack] = useState([])
+    const [todayComp, setTodayComp] = useState([])
 
 
     //const userId = props.extraData.uid
@@ -77,6 +78,17 @@ export default function HomeScreen({navigation}) {
             })
             setExtraSnack(extraSnackList)
         })
+
+        var TodaysComp = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('comp').doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('compToday')
+        TodaysComp.onSnapshot(function(querySnapshot){
+            var todayCompList = []
+
+            querySnapshot.forEach(function(doc){
+                todayCompList.push(doc.data())
+            })
+            setTodayComp(todayCompList)
+        })
         
     },[])
 
@@ -97,6 +109,15 @@ export default function HomeScreen({navigation}) {
                 setRegMeal(item)
                 setModalVisible(true)
                 setCurrentStage(10)
+            }
+        })
+       }
+       else if(meal_type.type === 'compensation'){
+        todayComp.forEach(function(item){
+            if(meal_type.timestamp === item.timestamp){
+                setRegMeal(item)
+                setModalVisible(true)
+                setCurrentStage(11)
             }
         })
        }
@@ -151,6 +172,19 @@ const extraMealsList = (extra) =>{
     });
   };
 
+  const todayCompList = (comp) =>{
+    console.log(comp)
+    return comp.map(item =>{
+        return (
+            <TouchableOpacity
+                    style={styles.mealCardDone}
+                    onPress={() => addMeal(item)}>
+                    <Text style={styles.cardTitleDone}>COMPENSATION</Text>
+            </TouchableOpacity>
+        );
+    });
+  };
+
     useEffect(()=>{
         setCurrentUser(userId.user.uid)
         setMealPlan(mealPlan)
@@ -165,6 +199,9 @@ const extraMealsList = (extra) =>{
             <ScrollView>
             <View>
                 {extraMealsList(extraSnack)}
+            </View>
+            <View>
+                {todayCompList(todayComp)}
             </View>
             <View>
                 {mealPlanList(mealPlan)}
