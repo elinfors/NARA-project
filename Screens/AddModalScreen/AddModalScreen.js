@@ -10,6 +10,8 @@ var plusButton = require('../../Components/Images/plus.png')
 import MealForm from './FormComponents/mealForm'
 import CompForm from './FormComponents/CompForm'
 import RegMeal from '../RegMeal/RegMealModal'
+import RegComp from '../RegMeal/RegCompModal'
+
 
 
 
@@ -112,6 +114,8 @@ export default AddModal = () => {
 
         : currentStage === 10 ?
         <RegMeal></RegMeal>
+        : currentStage === 11 ?
+        <RegComp></RegComp>
         :
         currentMeal === 'comp' ? 
         <CompForm></CompForm>

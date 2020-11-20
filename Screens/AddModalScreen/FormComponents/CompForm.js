@@ -74,6 +74,7 @@ export default CompForm = () => {
         console.log('SUBMIT:')
 
         var mealsRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('comp')
+        .doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('compToday')
         mealsRef.add({
             compType: compType,
             compTime: compTime,
@@ -82,7 +83,9 @@ export default CompForm = () => {
             compAt: compAt,
             comment: comment,
             timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm'),
-            
+            date: moment().utcOffset('+01:00').format('YYYY-MM-DD'),
+            type: 'compensation'
+
         })
         .then(function(){
             console.log('success')
@@ -142,21 +145,21 @@ export default CompForm = () => {
             {/* SECTION CONTENT (BUTTONS) */}
             <View style={styles.sectionContent}>
                 <TouchableOpacity 
-                        style={compTime === 'now' ? styles.buttonStyle : styles.buttonStyleInactive}
-                        onPress={()=>setCompTime('now')}>
-                        <Text style={compTime === 'now' ? styles.buttonTitle : styles.buttonTitleInactive}>
+                        style={compTime === 'I just did' ? styles.buttonStyle : styles.buttonStyleInactive}
+                        onPress={()=>setCompTime('I just did')}>
+                        <Text style={compTime === 'I just did' ? styles.buttonTitle : styles.buttonTitleInactive}>
                             I just did</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={compTime === 'lessThanHour' ? styles.buttonStyle : styles.buttonStyleInactive}
-                        onPress={()=>setCompTime('lessThanHour')}>
-                        <Text style={compTime === 'lessThanHour' ? styles.buttonTitle : styles.buttonTitleInactive}>
+                        style={compTime === 'Less than 1 hour ago' ? styles.buttonStyle : styles.buttonStyleInactive}
+                        onPress={()=>setCompTime('Less than 1 hour ago')}>
+                        <Text style={compTime === 'Less than 1 hour ago' ? styles.buttonTitle : styles.buttonTitleInactive}>
                             Less than 1 hour ago</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        style={compTime === 'moreThanHour' ? styles.buttonStyle : styles.buttonStyleInactive}
-                        onPress={()=>setCompTime('moreThanHour')}>
-                        <Text style={compTime === 'moreThanHour' ? styles.buttonTitle : styles.buttonTitleInactive}>
+                        style={compTime === 'More than 1 hour ago' ? styles.buttonStyle : styles.buttonStyleInactive}
+                        onPress={()=>setCompTime('More than 1 hour ago')}>
+                        <Text style={compTime === 'More than 1 hour ago' ? styles.buttonTitle : styles.buttonTitleInactive}>
                             More than 1 hour ago</Text>
                     </TouchableOpacity>
                 </View>
