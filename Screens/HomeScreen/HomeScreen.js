@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react'
+import React, {useState, useEffect, useContext, createContext} from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View, ScrollView} from 'react-native'
 import {firebase} from '../Firebase/config'
 import styles from './styles'
@@ -6,6 +6,7 @@ import {CurrentUserContext} from '../../App'
 import {ModalVisibleContext} from '../../App'
 import {CurrentMealContext} from '../../App'
 import {MealPlanContext} from '../../App'
+import {RegMealContext} from '../../App'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import moment from 'moment';
 
@@ -19,11 +20,17 @@ export default function HomeScreen({navigation}) {
     const {mealPlan, setMealPlan} = useContext(MealPlanContext)
     const userContext = useContext(CurrentUserContext)
 
+    // CONTEXT FOR CLICKED MEAL THAT ARE ALREADY REGISTERD
+    const {regMeal, setRegMeal} = useContext(RegMealContext)
+
+
 
     //const [Food, setFood] = useState('')
     //const [Mood, setMood] = useState('')
 
-    const [todayMeals, setTodayMeals] = useState([])
+    const [todayMealsList, setTodayMealsList] = useState([])
+    const [todayMealsObj, setTodayMealsObj] = useState({})
+    const [extraSnack, setExtraSnack] = useState([])
 
 
     //const userId = props.extraData.uid
@@ -44,28 +51,65 @@ export default function HomeScreen({navigation}) {
 
     useEffect(()=>{
         var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
-        .collection('meals')
-
+        .collection('meals').doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('mealsToday')
+        var mealObj = {}
         allMeals.onSnapshot(function(querySnapshot){
             var mealList = []
+            
             querySnapshot.forEach(function(doc){
-                if(doc.data().date === moment().utcOffset('+01:00').format('YYYY-MM-DD')){
+                //if(doc.data().date === moment().utcOffset('+01:00').format('YYYY-MM-DD')){
                     mealList.push(doc.data().type)
-                }
+                    mealObj[doc.id] = doc.data()
+                    
+               // }
             })
-            setTodayMeals(mealList)
+            setTodayMealsList(mealList)
+            setTodayMealsObj(mealObj)
         })
+
+        var TodaysExtraSnack = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('extraSnack').doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('mealsToday')
+        TodaysExtraSnack.onSnapshot(function(querySnapshot){
+            var extraSnackList = []
+
+            querySnapshot.forEach(function(doc){
+                extraSnackList.push(doc.data())
+            })
+            setExtraSnack(extraSnackList)
+        })
+        
     },[])
 
    function addMeal(meal_type){
+       if(todayMealsList.includes(meal_type.id)){
+        Object.keys(todayMealsObj).forEach(function(item){
+            //console.log(todayMealsObj[item].type)
+            if(meal_type.id === todayMealsObj[item].type){
+                setRegMeal(todayMealsObj[item])
+                setModalVisible(true)
+                setCurrentStage(10)
+            }
+        })
+       }
+       else if(meal_type.type ==='Extra Snack'){
+        extraSnack.forEach(function(item){
+            if(meal_type.timestamp === item.timestamp){
+                setRegMeal(item)
+                setModalVisible(true)
+                setCurrentStage(10)
+            }
+        })
+       }
+       else{
         setModalVisible(true)
-        setCurrentMeal(meal_type)
-        setCurrentStage(1)
-
+        setCurrentMeal(meal_type.id)
+        setCurrentStage(1) 
+       }
    }
 
+
    const mealDone = (mealType) =>{
-        if(todayMeals.includes(mealType)){
+        if(todayMealsList.includes(mealType)){
             return true
         }
         else{
@@ -81,13 +125,29 @@ export default function HomeScreen({navigation}) {
     //(a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 )
   
     return mealPlan.map(meal => {
+
       return (
         <TouchableOpacity
                     style={ mealDone(meal.id) ? styles.mealCardDone:styles.mealCard}
-                    onPress={() => addMeal(meal.id)}>
+                    onPress={() => addMeal(meal)}>
                     <Text style={ mealDone(meal.id) ? styles.cardTitleDone:styles.cardTitle}>{ mealDone(meal.id)? '':'ADD '} {meal.name.toUpperCase()}</Text>
             </TouchableOpacity>
       );
+      
+    });
+  };
+
+const extraMealsList = (extra) =>{
+    console.log('YOYO')
+    console.log(extra)
+    return extra.map(meal =>{
+        return (
+            <TouchableOpacity
+                    style={styles.mealCardDone}
+                    onPress={() => addMeal(meal)}>
+                    <Text style={styles.cardTitleDone}>EXTRA</Text>
+            </TouchableOpacity>
+        );
     });
   };
 
@@ -103,8 +163,13 @@ export default function HomeScreen({navigation}) {
             <Text style={styles.description}>Register today’s meals here! </Text>
             </View>
             <ScrollView>
-                <View>{mealPlanList(mealPlan)}
+            <View>
+                {extraMealsList(extraSnack)}
             </View>
+            <View>
+                {mealPlanList(mealPlan)}
+            </View>
+            
             </ScrollView>
            
 {/*

@@ -25,6 +25,7 @@ export const CurrentMealContext = createContext();
 export const MealPlanContext = createContext();
 export const EditModalContext = createContext();
 export const AddMealplanContext = createContext();
+export const RegMealContext = createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -46,6 +47,8 @@ export default function App() {
   const [currentMeal, setCurrentMeal] = useState(null)
   const [currentStage, setCurrentStage] = useState(0)
   const [mealPlan, setMealPlan] = useState([])
+
+  const [regMeal, setRegMeal] = useState({})
 
   //Meal plan context
   //const [mealPlan, setMealPlan] = useState([{name:'Breakfast', time:'07:00'}, {name:'Snack', time:'10.00'},{name:'Lunch', time:'12:00'}, {name: 'Snack', time:'15:00'}, {name:'Dinner', time:'19:00'}, {name:'Snack', time:'21:00'}])
@@ -266,6 +269,7 @@ export default function App() {
           <EditModalContext.Provider value={{editModalVisible, setEditModalVisible}}>
             <AddMealplanContext.Provider value ={{addModalVisible, setAddModalVisible}}>
             <MealPlanContext.Provider value={{mealPlan, setMealPlan, currentMealEdit, setCurrentMealEdit}}>
+              <RegMealContext.Provider value = {{regMeal, setRegMeal}}>
               <NavigationContainer>
                 <Stack.Navigator>
                   {user ? (
@@ -280,6 +284,7 @@ export default function App() {
                   )}
                   </Stack.Navigator>
               </NavigationContainer>
+              </RegMealContext.Provider>
             </MealPlanContext.Provider>
             </AddMealplanContext.Provider>
           </EditModalContext.Provider>
