@@ -49,8 +49,14 @@ export default MealForm = () => {
     const [eatCopy, setEatCopy] = useState()
 
     useEffect(()=>{
+        if(currentMeal === 'Snack1' || currentMeal === 'Snack2' || currentMeal === 'Snack3' || currentMeal === 'Extra Snack'){
+            var current_meal = 'Snack'
+        }
+        else{
+            var current_meal = currentMeal
+        }
         var savedFavRef = firebase.firestore().collection('users').doc(userContext.user.uid)
-        .collection('favorites').doc(currentMeal)
+        .collection('favorites').doc(current_meal)
         .collection('fooditems')
 
         savedFavRef.onSnapshot(function(querySnapshot){
@@ -120,9 +126,15 @@ export default MealForm = () => {
     }
 
     const handleFav = (sentFood) =>{
+        if(currentMeal === 'Snack1' || currentMeal === 'Snack2' || currentMeal === 'Snack3' || currentMeal === 'Extra Snack'){
+            var current_meal = 'Snack'
+        }
+        else{
+            var current_meal = currentMeal
+        }
         if(!favorites.includes(sentFood)){
             var favRef = firebase.firestore().collection('users').doc(userContext.user.uid)
-            .collection('favorites').doc(currentMeal).collection('fooditems').doc(sentFood)
+            .collection('favorites').doc(current_meal).collection('fooditems').doc(sentFood)
             favRef.set({
                 foodItem: sentFood
             })
@@ -169,9 +181,34 @@ export default MealForm = () => {
 
     const handleSubmit = () =>{
  
+        var mealsRef_mealPlan = firebase.firestore().collection('users').doc(userContext.user.uid).collection('meals')
+        .doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('mealsToday')
 
-        var mealsRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('meals')
-        mealsRef.add({
+        var mealsRef_extra = firebase.firestore().collection('users').doc(userContext.user.uid).collection('extraSnack')
+        .doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('mealsToday')
+
+        if(currentMeal === 'Extra Snack'){
+            mealsRef_extra.add({
+                didEat: didEat,
+                mealTime: mealTime,
+                feelRate: feelRate,
+                ateWith: ateWith,
+                ateAt: ateAt,
+                comment: comment,
+                timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm'),
+                date: moment().utcOffset('+01:00').format('YYYY-MM-DD'),
+                food: foodObj,
+                type: currentMeal,
+            })
+            .then(function(){
+                console.log('success')
+            })
+            .catch(function(error){
+                console.log('error: ', error)
+            })
+        }
+        else{
+        mealsRef_mealPlan.add({
             didEat: didEat,
             mealTime: mealTime,
             feelRate: feelRate,
@@ -181,7 +218,7 @@ export default MealForm = () => {
             timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm'),
             date: moment().utcOffset('+01:00').format('YYYY-MM-DD'),
             food: foodObj,
-            type: currentMeal
+            type: currentMeal,
         })
         .then(function(){
             console.log('success')
@@ -189,6 +226,8 @@ export default MealForm = () => {
         .catch(function(error){
             console.log('error: ', error)
         })
+        }
+        
 
     setCurrentStage(currentStage+1)
     setTimeout(() => {

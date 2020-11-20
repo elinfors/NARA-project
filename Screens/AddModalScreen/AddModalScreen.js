@@ -9,6 +9,7 @@ var plusButton = require('../../Components/Images/plus.png')
 
 import MealForm from './FormComponents/mealForm'
 import CompForm from './FormComponents/CompForm'
+import RegMeal from '../RegMeal/RegMealModal'
 
 
 
@@ -21,7 +22,13 @@ export default AddModal = () => {
 
   const handleNext = (meal) => {
     setCurrentMeal(meal)
-    setCurrentStage(currentStage+1)
+    if(meal === 'Extra Snack'){
+      setCurrentStage(currentStage+2)
+    }
+    else{
+      setCurrentStage(currentStage+1)
+
+    }
     console.log(currentStage)
   }
 
@@ -63,6 +70,7 @@ export default AddModal = () => {
             
           </View>
           <View style={styles.constumContentView}>
+            {/*
             <TouchableOpacity
                     style={styles.mealCard}
                     onPress={()=>handleNext('Breakfast')}>
@@ -85,10 +93,16 @@ export default AddModal = () => {
                     onPress={()=>handleNext('Dinner')}>
                     <Text style={styles.cardTitle}>DINNER</Text>
             </TouchableOpacity>
+            */}
+            <TouchableOpacity
+                    style={styles.mealCard}
+                    onPress={()=>handleNext('Extra Snack')}>
+                    <Text style={styles.cardTitle}>ADD EXTRA SNACK</Text>
+            </TouchableOpacity>
             </View>
             <View style={styles.constumContentViewComp}>
             <TouchableOpacity
-                    style={styles.mealCardComp}
+                    style={styles.mealCard}
                     onPress={()=>handleNext('comp')}>
                     <Text style={styles.cardTitle}>COMPENSATION</Text>
             </TouchableOpacity>
@@ -96,12 +110,13 @@ export default AddModal = () => {
 
           </View>
 
-        : 
+        : currentStage === 10 ?
+        <RegMeal></RegMeal>
+        :
         currentMeal === 'comp' ? 
         <CompForm></CompForm>
         :
-        <MealForm></MealForm>
-      
+        <MealForm></MealForm> 
         
         }
                 
@@ -179,8 +194,8 @@ const styles = StyleSheet.create({
 mealCard: {
     backgroundColor: '#7CA179',
     padding:15,
-    height: 120,
-    width:120,
+    height: 80,
+    width:'80%',
     margin:10,
     borderRadius: 10,
     alignItems: "center",
