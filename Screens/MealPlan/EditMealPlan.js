@@ -6,6 +6,7 @@ import {CurrentUserContext} from '../../App'
 import {EditModalContext} from '../../App'
 import {MealPlanContext} from '../../App'
 import SettingsScreen from './SettingsScreen'
+import AddMealModal from './AddMealModal'
 
 
 export default EditMealPlan=()=> {
@@ -35,7 +36,7 @@ export default EditMealPlan=()=> {
                 onBackdropPress={() => setEditModalVisible(false)}
                 style={styles.contentView}
                 >
-                   {currentMealEdit === null ? null: 
+                   {currentMealEdit === null ? <AddMealModal></AddMealModal>: 
                    <SettingsScreen></SettingsScreen>}
                 </Modal>
             </View>
