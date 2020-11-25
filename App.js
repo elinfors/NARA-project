@@ -16,6 +16,7 @@ import {firebase} from './Screens/Firebase/config'
 import {decode, encode} from 'base-64'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EditMealPlan from './Screens/MealPlan/EditMealPlan'
+import PrevReg from './Screens/PrevReg/PrevReg'
 
 
 if (!global.btoa) {  global.btoa = encode }
@@ -31,6 +32,7 @@ export const RegMealContext = createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
+const OverviewStack = createStackNavigator();
 
 const AddModalComponent = () =>{
   return null
@@ -82,6 +84,15 @@ export default function App() {
     )
   }
 
+  overViewStack = () =>{
+    return(
+      <OverviewStack.Navigator>
+        <OverviewStack.Screen name="Overview Stack" component = {OverviewScreen}></OverviewStack.Screen>
+        <OverviewStack.Screen name="PrevReg" component={PrevReg}></OverviewStack.Screen>
+      </OverviewStack.Navigator>
+    )
+  }
+
   createBottomTabs = () => {
     return(
       <Tab.Navigator
@@ -118,7 +129,8 @@ export default function App() {
         tabBarButton: ()=>(<EditMealPlan/>),}}/>
         <Tab.Screen name = 'Add' component = {AddModalComponent} options = {{
           tabBarButton: ()=>(<AddModal/>),}}/>
-        <Tab.Screen name = 'Overview' component = {OverviewScreen}/>
+        <Tab.Screen name = 'Overview' component = {overViewStack}/>
+          
         <Tab.Screen name = 'Settings' component = {HomeScreen}/>
 
 

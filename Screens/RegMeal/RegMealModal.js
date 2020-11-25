@@ -53,6 +53,7 @@ export default RegMeal = () =>{
         }
         
         setModalVisible(false)
+        setCurrentStage(0)
 
     }
 

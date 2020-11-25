@@ -67,7 +67,8 @@ export default function OverviewScreen({navigation}) {
                     <Text style={styles.buttonItem}>Statistics</Text>
                     <MaterialIcon name={'arrow-forward-ios'} size={20} color={'gray'} style={styles.buttonItem}></MaterialIcon>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.buttonCard}>
+                <TouchableOpacity style={styles.buttonCard}
+                    onPress={()=> navigation.navigate('PrevReg')}>
                     <MaterialCommunityIcons name={'page-previous-outline'} size={20} color={'gray'} style={styles.buttonItem}></MaterialCommunityIcons>
                     <Text style={styles.buttonItem}>
                         Previous registrations
