@@ -28,7 +28,7 @@ export default MealForm = () => {
     const userContext = useContext(CurrentUserContext)
     const [inputMeal, setInputMeal] = useState('')
 
-    const feeling = {1: 'Jamie', 2: 'devastated', 3: 'heart broken', 4:'good', 5:'happy'}
+    const feeling = {1: 'Depressed', 2: 'Sad', 3: 'Neutral', 4:'Good', 5:'Happy'}
 
 
     // STATES TO SEND TO FIREBASE
@@ -36,7 +36,7 @@ export default MealForm = () => {
     //const [foodList , setFoodList] = useState([])
     const [foodObj, setfoodObj] = useState({})
     const [mealTime, setMealTime] = useState('')
-    const [feelRate, setFeelRate] = useState(1)
+    const [feelRate, setFeelRate] = useState(3)
     const [ateWith, setAteWith] = useState('')
     const [ateAt, setAteAt] = useState('')
     const [comment, setComment] = useState('')
@@ -188,9 +188,19 @@ export default MealForm = () => {
         .doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('mealsToday')
 
         if(currentMeal === 'Extra Snack'){
+            var reason = ''
+            if(mealTime === 'now'){
+                reason = 'I restricted'
+            }
+            if(mealTime === 'lessThanHour'){
+                reason = "I wasn't hungry"
+            }
+            if(mealTime === 'moreThanHour'){
+                reason = 'Other'
+            }
             mealsRef_extra.add({
                 didEat: didEat,
-                mealTime: mealTime,
+                mealTime: reason,
                 feelRate: feelRate,
                 ateWith: ateWith,
                 ateAt: ateAt,
@@ -232,6 +242,7 @@ export default MealForm = () => {
     setCurrentStage(currentStage+1)
     setTimeout(() => {
         setModalVisible(false)
+        setCurrentStage(0)
       }, 1500);
         
     }
@@ -414,7 +425,7 @@ export default MealForm = () => {
                     trackStyle={{ height: 7, backgroundColor: 'transparent' }}
                     thumbStyle={{ height: 20, width: 20, backgroundColor: '#A3C39D' }}
                     />
-                    <Text style={{alignSelf:'center', fontSize:10}}>Value: {feeling[feelRate.toString()]}</Text>
+                    <Text style={{alignSelf:'center', fontSize:10}}>{feeling[feelRate.toString()]}</Text>
                 </View>
             </View>
             {/* END SECTION */}
