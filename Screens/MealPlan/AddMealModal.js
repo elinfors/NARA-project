@@ -1,4 +1,4 @@
-import React, { useState, useContext} from 'react';
+import React, { useState, useContext, useEffect} from 'react';
 import { StyleSheet, View, Button, Text, TouchableOpacity, Image, Switch, ScrollView } from "react-native";
 import Modal from 'react-native-modal';
 import {firebase} from '../Firebase/config'
@@ -83,9 +83,6 @@ export default AddMealModal = () => {
                 </View>
 
                             {/*ITEM 1*/}
-                            <View style={{flex:1, alignItems:'center'}}>  
-                                <Text style={styles.mealTitle}>{name}</Text> 
-                            </View>
                             {/*ITEM 2*/}
                             <View style={{flex:1}}>
                                 <Text>At what time would you like to eat?</Text>

@@ -10,6 +10,8 @@ import HomeScreen from "./Screens/HomeScreen/HomeScreen"
 import RegistrationScreen from "./Screens/RegistrationScreen/RegistrationScreen"
 import MealPlan from './Screens/MealPlan/MealPlan'
 import AddModal from './Screens/AddModalScreen/AddModalScreen'
+import OverviewScreen from './Screens/OverviewScreen/OverviewScreen'
+import AddMealModal from './Screens/MealPlan/AddMealModal'
 import {firebase} from './Screens/Firebase/config'
 import {decode, encode} from 'base-64'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -34,6 +36,9 @@ const AddModalComponent = () =>{
   return null
 }
 const EditModalComponent = () =>{
+  return null
+}
+const MealplanAddComponent = () =>{
   return null
 }
 
@@ -113,7 +118,7 @@ export default function App() {
         tabBarButton: ()=>(<EditMealPlan/>),}}/>
         <Tab.Screen name = 'Add' component = {AddModalComponent} options = {{
           tabBarButton: ()=>(<AddModal/>),}}/>
-        <Tab.Screen name = 'Overview' component = {HomeScreen}/>
+        <Tab.Screen name = 'Overview' component = {OverviewScreen}/>
         <Tab.Screen name = 'Settings' component = {HomeScreen}/>
 
 

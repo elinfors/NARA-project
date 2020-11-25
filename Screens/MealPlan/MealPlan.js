@@ -50,7 +50,8 @@ export default function MealPlan({navigation}) {
     }
 
     const addMeal = () =>{
-        setAddModalVisible(true)
+        setCurrentMealEdit(null)
+        setEditModalVisible(true)
 
     }
 
