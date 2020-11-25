@@ -1,9 +1,12 @@
 import React, { useState, useContext, useEffect} from 'react';
 import { View, Text, TouchableOpacity, Rect, ScrollView} from "react-native";
+import {Divider } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {firebase} from '../../Firebase/config';
 import moment from 'moment';
 import styles from './stylesRegMeal';
+
+import {didEatCopy, skippedCopy} from '../AddModalScreen/FormComponents/formCopy'
 
 
 // CONTEXT
@@ -19,25 +22,53 @@ export default RegMeal = () =>{
     const userContext = useContext(CurrentUserContext)
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
 
-
+    const feeling = {1: 'Depressed', 2: 'Sad', 3: 'Neutral', 4:'Good', 5:'Happy'}
 
     const handleRemove = () =>{
-        //console.log(regMeal.uid)
-        //console.log(regMeal)
-        //console.log(regMeal.id)
-        var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
-        .collection('meals').doc(regMeal.date).collection('mealsToday')
-        allMeals.onSnapshot(function(querySnapshot){
-            querySnapshot.forEach(function(doc){
+        if(regMeal.type === 'Extra Snack'){
+            var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
+            .collection('extraSnack').doc(regMeal.date).collection('mealsToday')
+            allMeals.onSnapshot(function(querySnapshot){
+                querySnapshot.forEach(function(doc){
 
-                if(doc.data().type === regMeal.type){
-                    allMeals.doc(doc.id).delete()
-                }
-                
+                    if(doc.data().type === regMeal.type){
+                        allMeals.doc(doc.id).delete()
+                    }
+                    
+                })
             })
-        })
+        }
+        else{
+           var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
+            .collection('meals').doc(regMeal.date).collection('mealsToday')
+            allMeals.onSnapshot(function(querySnapshot){
+                querySnapshot.forEach(function(doc){
+
+                    if(doc.data().type === regMeal.type){
+                        allMeals.doc(doc.id).delete()
+                    }
+                    
+                })
+            }) 
+        }
+        
         setModalVisible(false)
 
+    }
+
+    const ListHeadline = () =>{
+        return(
+            <>
+            <View style={styles.listHeadlineView}>
+                <View style={{justifyContent:'flex-start', flex:1}}>
+                                <Text style={{fontSize:10,fontWeight:'500'}}>YOUR MEAL:</Text>
+                        </View>
+                        <View style={{justifyContent:'flex-end', flex:1}}>
+                                <Text style={{fontSize:10, alignSelf:'flex-end', marginEnd:10, fontStyle:'italic'}}>amount:</Text>
+                        </View>
+                </View>
+            </>
+        )
     }
 
     return(
@@ -55,8 +86,13 @@ export default RegMeal = () =>{
             <View style={styles.constumContentView}>
                 <View style={styles.regMealView}>
                 <ScrollView style={styles.scrollView}>
-
                 <View style={styles.listView}>
+                {regMeal.didEat === true ? 
+                ListHeadline()
+                :
+                null
+                }
+                
                 {Object.keys(regMeal.food).map(item => {
                     return(
                     <View style={styles.listViewItem}>
@@ -64,30 +100,32 @@ export default RegMeal = () =>{
                                 <Text style={{fontWeight:'600'}}>{item}</Text>
                         </View>
                         <View style={{justifyContent:'flex-end', flex:1}}>
-                                <Text style={{fontWeight:'600', alignSelf:'flex-end'}}>{regMeal.food[item]}</Text>
+                                <Text style={{fontWeight:'600', alignSelf:'flex-end', marginEnd:10, color:'#C4C4C4'}}>{regMeal.food[item]}</Text>
                         </View>
                     </View>
                     )
                 })}
                 </View>
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>When did you eat this meal?</Text>
+                    <Text style={styles.questionHeadline}>{regMeal.didEat === true ? didEatCopy.q1 : skippedCopy.q1}</Text>
                     <Text style={styles.questionText}>{regMeal.mealTime}</Text>
                 </View>
-
+                <Divider></Divider>
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>How are you feeling overall?</Text>
-                    <Text style={styles.questionText}>{regMeal.feelRate}</Text>
+                    <Text style={styles.questionHeadline}>{regMeal.didEat === true ? didEatCopy.q2 : skippedCopy.q2}</Text>
+                    <Text style={styles.questionText}>{feeling[regMeal.feelRate]}</Text>
                 </View>
+                <Divider></Divider>
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>Who did you eat your meal with?</Text>
+                    <Text style={styles.questionHeadline}>{regMeal.didEat === true ? didEatCopy.q3 : skippedCopy.q3}</Text>
                     <Text style={styles.questionText}>{regMeal.ateWith}</Text>
                 </View>
+                <Divider></Divider>
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>Where did you eat your meal?</Text>
+                    <Text style={styles.questionHeadline}>{regMeal.didEat === true ? didEatCopy.q4 : skippedCopy.q4}</Text>
                     <Text style={styles.questionText}>{regMeal.ateAt}</Text>
                 </View>
-
+                <Divider></Divider>
                 <View style={styles.questionView}>
                     <Text style={styles.questionHeadline}>Is there anything you would like to elaborate on?</Text>
                     <Text style={styles.commentText}>{regMeal.comment === '' ? 'No Comment Added' : regMeal.comment}</Text>

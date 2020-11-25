@@ -1,0 +1,30 @@
+[debug] [2020-11-25T07:41:02.517Z] ----------------------------------------------------------------------
+[debug] [2020-11-25T07:41:02.523Z] Command:       /usr/local/lib/node_modules/firebase-tools/lib/bin/firebase.js /Users/lovisaforsberg/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase init
+[debug] [2020-11-25T07:41:02.523Z] CLI Version:   8.4.2
+[debug] [2020-11-25T07:41:02.524Z] Platform:      darwin
+[debug] [2020-11-25T07:41:02.524Z] Node Version:  v12.16.1
+[debug] [2020-11-25T07:41:02.536Z] Time:          Wed Nov 25 2020 08:41:02 GMT+0100 (GMT+01:00)
+[debug] [2020-11-25T07:41:02.537Z] ----------------------------------------------------------------------
+[debug] [2020-11-25T07:41:02.537Z] 
+[debug] [2020-11-25T07:41:02.557Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-11-25T07:41:02.557Z] > authorizing via signed-in user
+[info] 
+     ######## #### ########  ######## ########     ###     ######  ########
+     ##        ##  ##     ## ##       ##     ##  ##   ##  ##       ##
+     ######    ##  ########  ######   ########  #########  ######  ######
+     ##        ##  ##    ##  ##       ##     ## ##     ##       ## ##
+     ##       #### ##     ## ######## ########  ##     ##  ######  ########
+
+You're about to initialize a Firebase project in this directory:
+
+  /Users/lovisaforsberg/nara-project
+
+[debug] [2020-11-25T07:42:38.855Z] TypeError: Cannot read property 'setRawMode' of null
+    at ReadStream.setRawMode (tty.js:75:28)
+    at Interface._setRawMode (readline.js:283:16)
+    at Interface.close (readline.js:406:10)
+    at ReadStream.ontermend (readline.js:194:10)
+    at ReadStream.emit (events.js:323:22)
+    at ReadStream.EventEmitter.emit (domain.js:482:12)
+    at endReadableNT (_stream_readable.js:1204:12)
+    at processTicksAndRejections (internal/process/task_queues.js:84:21)

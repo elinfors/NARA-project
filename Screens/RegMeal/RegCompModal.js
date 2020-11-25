@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect} from 'react';
 import { View, Text, TouchableOpacity, Rect, ScrollView} from "react-native";
+import {Divider } from 'react-native-elements';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {firebase} from '../../Firebase/config';
 import moment from 'moment';
@@ -19,19 +20,17 @@ export default RegComp = () =>{
     const userContext = useContext(CurrentUserContext)
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
 
-
+    const feeling = {1: 'Depressed', 2: 'Sad', 3: 'Neutral', 4:'Good', 5:'Happy'}
 
     const handleRemove = () =>{
-        //console.log(regMeal.uid)
-        //console.log(regMeal)
-        //console.log(regMeal.id)
-        var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
-        .collection('meals').doc(regMeal.date).collection('mealsToday')
-        allMeals.onSnapshot(function(querySnapshot){
+        var allComp = firebase.firestore().collection('users').doc(userContext.user.uid)
+        .collection('comp').doc(regMeal.date).collection('compToday')
+        allComp.onSnapshot(function(querySnapshot){
             querySnapshot.forEach(function(doc){
 
-                if(doc.data().type === regMeal.type){
-                    allMeals.doc(doc.id).delete()
+                if(doc.data().timestamp === regMeal.timestamp){
+                    //console.log(regMeal.compType)
+                    allComp.doc(doc.id).delete()
                 }
                 
             })
@@ -72,23 +71,30 @@ export default RegComp = () =>{
                 })}
                 </View>*/}
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>When did you eat this meal?</Text>
+                    <Text style={styles.questionHeadline}>How did you compensate?</Text>
+                    <Text style={styles.questionText}>{regMeal.compType}</Text>
+                </View>
+                <Divider></Divider>
+                <View style={styles.questionView}>
+                    <Text style={styles.questionHeadline}>When did you compensate?</Text>
                     <Text style={styles.questionText}>{regMeal.compTime}</Text>
                 </View>
-
+                <Divider></Divider>
                 <View style={styles.questionView}>
                     <Text style={styles.questionHeadline}>How are you feeling overall?</Text>
-                    <Text style={styles.questionText}>{regMeal.feelRate}</Text>
+                    <Text style={styles.questionText}>{feeling[regMeal.feelRate]}</Text>
                 </View>
+                <Divider></Divider>
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>Who did you eat your meal with?</Text>
+                    <Text style={styles.questionHeadline}>Who were you with when this occured?</Text>
                     <Text style={styles.questionText}>{regMeal.compWith}</Text>
                 </View>
+                <Divider></Divider>
                 <View style={styles.questionView}>
-                    <Text style={styles.questionHeadline}>Where did you eat your meal?</Text>
+                    <Text style={styles.questionHeadline}>Where were you when you compensated?</Text>
                     <Text style={styles.questionText}>{regMeal.compAt}</Text>
                 </View>
-
+                <Divider></Divider>
                 <View style={styles.questionView}>
                     <Text style={styles.questionHeadline}>Is there anything you would like to elaborate on?</Text>
                     <Text style={styles.commentText}>{regMeal.comment === '' ? 'No Comment Added' : regMeal.comment}</Text>
@@ -103,7 +109,7 @@ export default RegComp = () =>{
                 <TouchableOpacity
                 style={styles.nextBtn}
                 onPress={()=>handleRemove()}>
-                <Text style={styles.nextBtnTitle}>Remove Meal</Text>
+                <Text style={styles.nextBtnTitle}>Remove Compensation</Text>
                 </TouchableOpacity>
             </View>
             

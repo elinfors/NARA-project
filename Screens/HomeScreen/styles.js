@@ -44,18 +44,29 @@ export default StyleSheet.create({
         backgroundColor: '#ffffff',
         marginLeft: 15,
         marginRight: 15,
-        marginTop: 15,
-        height: 60,
+        marginBottom: 15,
+        height: 50,
         borderRadius: 5,
         alignItems: "center",
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     mealCardDone: {
         backgroundColor: '#7ca179',
         marginLeft: 15,
         marginRight: 15,
-        marginTop: 15,
-        height: 60,
+        marginBottom: 15,
+        height: 50,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: 'center',
+        
+    },
+    mealCardComp: {
+        backgroundColor: '#404040',
+        marginLeft: 15,
+        marginRight: 15,
+        marginBottom: 15,
+        height: 50,
         borderRadius: 5,
         alignItems: "center",
         justifyContent: 'center',
@@ -63,13 +74,20 @@ export default StyleSheet.create({
     },
     description: {
         textAlign: 'center',
-        margin:20,
-        fontSize: 20,
-        color: '#ffffff'
+        margin:10,
+        fontSize: 15,
+        color: '#000000'
     },
     headlineBackground:{
         backgroundColor:'#7ca179'
 
+    },
+    scrollView:{
+        width:'100%',
+        height:'100%'
+    },
+    sectionCard:{
+        width:'70%'
     },
     dayBanner:{
         flexDirection: 'row',

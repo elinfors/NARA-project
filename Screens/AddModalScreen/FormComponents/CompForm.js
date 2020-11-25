@@ -34,7 +34,7 @@ export default CompForm = () => {
     // "HELP-STATES"
     const [commentHelp, setCommentHelp] = useState('')
 
-    const feeling = {1: 'Jamie', 2: 'devastated', 3: 'heart broken', 4:'good', 5:'happy'}
+    const feeling = {1: 'Depressed', 2: 'Sad', 3: 'Neutral', 4:'Good', 5:'Happy'}
 
 
 
@@ -61,7 +61,6 @@ export default CompForm = () => {
     const handleComment = () =>{
         setComment(commentHelp)
         //setCommentHelp('')
-        console.log(comment)
         Keyboard.dismiss()
     }
 
@@ -71,7 +70,6 @@ export default CompForm = () => {
       }
 
     const handleSubmit = () =>{
-        console.log('SUBMIT:')
 
         var mealsRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('comp')
         .doc(moment().utcOffset('+01:00').format('YYYY-MM-DD')).collection('compToday')
@@ -82,10 +80,9 @@ export default CompForm = () => {
             compWith: compWith,
             compAt: compAt,
             comment: comment,
-            timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm'),
+            timestamp: moment().utcOffset('+01:00').format('YYYY-MM-DD HH:mm:ss'),
             date: moment().utcOffset('+01:00').format('YYYY-MM-DD'),
             type: 'compensation'
-
         })
         .then(function(){
             console.log('success')
@@ -97,6 +94,7 @@ export default CompForm = () => {
     setCurrentStage(currentStage+1)
     setTimeout(() => {
         setModalVisible(false)
+        setCurrentStage(0)
       }, 1500);
         
     }

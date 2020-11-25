@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext, createContext} from 'react'
 import { Image, Text, TextInput, TouchableOpacity, View, ScrollView} from 'react-native'
+import { Card, Divider } from 'react-native-elements';
 import {firebase} from '../Firebase/config'
 import styles from './styles'
 import {CurrentUserContext} from '../../App'
@@ -159,8 +160,6 @@ export default function HomeScreen({navigation}) {
   };
 
 const extraMealsList = (extra) =>{
-    console.log('YOYO')
-    console.log(extra)
     return extra.map(meal =>{
         return (
             <TouchableOpacity
@@ -173,11 +172,10 @@ const extraMealsList = (extra) =>{
   };
 
   const todayCompList = (comp) =>{
-    console.log(comp)
     return comp.map(item =>{
         return (
             <TouchableOpacity
-                    style={styles.mealCardDone}
+                    style={styles.mealCardComp}
                     onPress={() => addMeal(item)}>
                     <Text style={styles.cardTitleDone}>COMPENSATION</Text>
             </TouchableOpacity>
@@ -193,21 +191,25 @@ const extraMealsList = (extra) =>{
     return (
         <View>
 
-            <View style={styles.headlineBackground}>
-            <Text style={styles.description}>Register today’s meals here! </Text>
-            </View>
-            <ScrollView>
             <View>
-                {extraMealsList(extraSnack)}
-            </View>
-            <View>
-                {todayCompList(todayComp)}
-            </View>
+            <ScrollView style={styles.scrollView}>
+                {/*<View style={styles.headlineBackground}>*/}
+                <Text style={styles.description}>Register today’s meals here! </Text>
+                {/*</View>*/}
             <View>
                 {mealPlanList(mealPlan)}
             </View>
-            
+            <Divider style={{marginTop:10, marginBottom:10}}></Divider>
+            <Text style={styles.description}>{extraSnack.length === 0 ? '' : 'Snacks that were not in meal plan'}</Text>
+            <View>
+                {extraMealsList(extraSnack)}
+            </View>
+             <Text style={styles.description}>{todayComp.length === 0 ? '' : 'Registered compensation'}</Text>
+            <View>
+                {todayCompList(todayComp)}
+            </View>
             </ScrollView>
+            </View>
            
 {/*
             <TouchableOpacity

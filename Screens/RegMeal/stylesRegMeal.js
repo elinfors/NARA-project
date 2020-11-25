@@ -44,7 +44,7 @@ export default StyleSheet.create({
         backgroundColor: '#7CA179',
         borderRadius: 5,
         height: 40,
-        width:150,
+        width:170,
         alignItems: "center",
         justifyContent: 'center',
         shadowColor: 'rgba(0, 0, 0, 0.1)',
@@ -58,6 +58,11 @@ export default StyleSheet.create({
         color:'white',
         fontSize:15,
         fontWeight:'400'
+      },
+
+      listHeadlineView:{
+        flex:1,
+        flexDirection:'row'
       },
 
       listView:{
