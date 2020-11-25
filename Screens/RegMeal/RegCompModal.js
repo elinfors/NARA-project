@@ -36,7 +36,7 @@ export default RegComp = () =>{
             })
         })
         setModalVisible(false)
-
+        setCurrentStage(0)
     }
 
     return(
