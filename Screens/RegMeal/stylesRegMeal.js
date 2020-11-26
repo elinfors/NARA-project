@@ -11,10 +11,16 @@ export default StyleSheet.create({
         height: '90%',
         //flex:1
       },
+      modalHeadline:{
+        color:'grey',
+        fontSize:15
+      },
       headlineView:{
         flex: 1,
         flexDirection: 'row',
         justifyContent:'space-between',
+        alignItems:'center',
+        marginBottom:5
         //height:'10%'
       },
       constumContentView:{

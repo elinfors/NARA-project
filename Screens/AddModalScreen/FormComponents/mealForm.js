@@ -538,7 +538,7 @@ export default MealForm = () => {
             <TouchableOpacity onPress={()=>handleBack()}>
                 <Ionicons name={'ios-arrow-back'} size={30} color={'black'} />
             </TouchableOpacity>
-            <Text style={styles.textStyle}>{currentMeal} 👋!</Text>
+                <Text style={styles.modalHeadline}>{currentMeal==='Snack1'||currentMeal==='Snack2'||currentMeal==='Snack3'? 'SNACK': currentMeal.toUpperCase()}</Text>
             <TouchableOpacity onPress={()=>handleClose()}>
                 <Ionicons name={'ios-close'} size={40} color={'black'} />
             </TouchableOpacity>

@@ -61,6 +61,16 @@ export default StyleSheet.create({
         justifyContent: 'center',
         
     },
+    mealCardNotEaten:{
+        backgroundColor: '#BDD0BC',
+        marginLeft: 15,
+        marginRight: 15,
+        marginBottom: 15,
+        height: 50,
+        borderRadius: 5,
+        alignItems: "center",
+        justifyContent: 'center',
+    },
     mealCardComp: {
         backgroundColor: '#404040',
         marginLeft: 15,

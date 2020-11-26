@@ -295,7 +295,7 @@ export default CompForm = () => {
             <TouchableOpacity onPress={()=>handleBack()}>
                 <Ionicons name={'ios-arrow-back'} size={30} color={'black'} />
             </TouchableOpacity>
-            <Text>{currentMeal} 👋!</Text>
+            <Text style={styles.modalHeadline}>COMPENSATION</Text>
             <TouchableOpacity onPress={()=>handleClose()}>
                 <Ionicons name={'ios-close'} size={40} color={'black'} />
             </TouchableOpacity>

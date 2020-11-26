@@ -16,7 +16,7 @@ export default ProgressBar = ({props}) => {
                 <>
                 <View style={currentStage > 2 ? styles.DoneRecView : styles.CurrentRecView}/>
                 <View style={currentStage > 3 ? styles.DoneRecView : currentStage === 3?styles.CurrentRecView : styles.UndoneRecView}/>
-                <View style={currentStage < 4 ? styles.UndoneRecView : styles.CurrentRecView}/>
+                <View style={currentStage < 4 ? styles.UndoneRecView : currentStage === 5 ? styles.DoneRecView: styles.CurrentRecView}/>
                 </>
             )
         }
@@ -24,7 +24,7 @@ export default ProgressBar = ({props}) => {
             return(
                 <>
                 <View style={currentStage > 3 ? styles.DoneRecViewLong : styles.CurrentRecViewLong}/>
-                <View style={currentStage < 4 ? styles.UndoneRecViewLong: styles.CurrentRecViewLong}/>
+                <View style={currentStage < 4 ? styles.UndoneRecViewLong: currentStage === 5 ? styles.DoneRecViewLong: styles.CurrentRecViewLong}/>
                 </>
             )
         }
@@ -33,7 +33,7 @@ export default ProgressBar = ({props}) => {
                 <>
                 <View style={currentStage > 1 ? styles.DoneRecView : styles.CurrentRecView}/>
                 <View style={currentStage > 2 ? styles.DoneRecView : currentStage === 2?styles.CurrentRecView : styles.UndoneRecView}/>
-                <View style={currentStage < 3 ? styles.UndoneRecView : styles.CurrentRecView}/>
+                <View style={currentStage < 3 ? styles.UndoneRecView : currentStage === 4 ? styles.DoneRecView: styles.CurrentRecView}/>
                 </>
             )
         }
