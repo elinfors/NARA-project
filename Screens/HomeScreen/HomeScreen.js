@@ -15,6 +15,8 @@ import moment from 'moment';
 
 export default function HomeScreen({navigation}) {
 
+
+
     const [currentUser, setCurrentUser] = useState(null)
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
     const {currentMeal, setCurrentMeal, currentStage, setCurrentStage} = useContext(CurrentMealContext)

@@ -4,6 +4,9 @@ import {firebase} from '../Firebase/config'
 import styles from './PrevRegStyles'
 import moment from 'moment';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
+
+
 
 
 // CONTEXT  
@@ -15,6 +18,7 @@ import {RegMealContext} from '../../App'
 import {ChooseDateContex} from '../../App'
 
 export default function PrevReg({navigation}) {
+
 
     const [currentUser, setCurrentUser] = useState(null)
     const {modalVisible, setModalVisible, toggleVisible} = useContext(ModalVisibleContext)
@@ -141,7 +145,7 @@ export default function PrevReg({navigation}) {
             <ScrollView style={styles.scrollView}>
                 <View style={styles.headlineView}>
                     <TouchableOpacity onPress={()=>handleDateBack()}>
-                        <Ionicons name={'ios-close'} size={40} color={'black'} />
+                        <Icon name='chevron-left' size={30} color={'black'} />
                     </TouchableOpacity>
                     <View style={styles.headlineTextView}>
                         <Text style={styles.headlineText}>{getWeekday(choosenDate).toUpperCase()}</Text>
@@ -155,9 +159,9 @@ export default function PrevReg({navigation}) {
                         }
                     </View>
                     {choosenDate===moment().utcOffset('+01:00').format('YYYY-MM-DD')?
-                    <Ionicons name={'ios-close'} size={40} color={'grey'} />:
+                    <Icon name={'chevron-right'} size={35} color={'grey'} />:
                     <TouchableOpacity onPress={()=>handleDateForth()}>
-                        <Ionicons name={'ios-close'} size={40} color={'black'} />
+                        <Icon name={'chevron-right'} size={35} color={'black'} />
                     </TouchableOpacity>
                     }
                 </View>

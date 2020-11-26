@@ -17,9 +17,11 @@ import AddMealModal from './Screens/MealPlan/AddMealModal'
 import {firebase} from './Screens/Firebase/config'
 import {decode, encode} from 'base-64'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import EditMealPlan from './Screens/MealPlan/EditMealPlan'
 import PrevReg from './Screens/PrevReg/PrevReg'
 import Statistics from './Screens/Statistics/statistics'
+import Settings from './Screens/Settings/Settings'
 
 
 if (!global.btoa) {  global.btoa = encode }
@@ -109,20 +111,20 @@ export default function App() {
 
             if (route.name === 'Home') {
               iconName = focused
-                ? 'ios-home'
-                : 'ios-home';
+                ? 'home'
+                : 'home';
             } 
             else if (route.name === 'Meal Plan'){
-              iconName = focused ? 'ios-create' : 'ios-create';
+              iconName = focused ? 'list' : 'list';
             }
             else if (route.name === 'Overview'){
-              iconName = focused ? 'ios-stats-chart' : 'ios-stats-chart';
+              iconName = focused ? 'line-chart' : 'line-chart';
             }
             else if (route.name === 'Settings') {
-              iconName = focused ? 'ios-settings' : 'ios-settings';
+              iconName = focused ? 'cog' : 'cog';
             }
             // You can return any component that you like here!
-            return <Ionicons name={iconName} size={size} color={color} />;
+            return <Icon name={iconName} size={20} color={color} />;
           },
         })}
         tabBarOptions={{
@@ -138,7 +140,7 @@ export default function App() {
           tabBarButton: ()=>(<AddModal/>),}}/>
         <Tab.Screen name = 'Overview' component = {overViewStack}/>
           
-        <Tab.Screen name = 'Settings' component = {HomeScreen}/>
+        <Tab.Screen name = 'Settings' component = {Settings}/>
 
 
       </Tab.Navigator>
