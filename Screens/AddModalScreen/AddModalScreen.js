@@ -65,7 +65,7 @@ export default AddModal = () => {
           <View style={styles.headlineView}>
             
             <Text style={styles.textStyle}> </Text>
-            <Text style={styles.textStyle}>REGISTER</Text>
+            <Text style={styles.modalHeadline}>REGISTER</Text>
              <TouchableOpacity onPress={()=>handleClose()}>
                 <Ionicons name={'ios-close'} size={40} color={'black'} />
             </TouchableOpacity>
@@ -144,7 +144,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent:'space-between'
   },
-  
+  modalHeadline:{
+    color:'grey',
+    fontSize:15
+  },
   contentTitle: {
     fontSize: 20,
     marginBottom: 12,

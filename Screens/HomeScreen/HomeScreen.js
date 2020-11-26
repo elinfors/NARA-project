@@ -39,17 +39,6 @@ export default function HomeScreen({navigation}) {
     const userId = useContext(CurrentUserContext)
     //console.log(userId)
 
-/*
-
-    const onAddLogg = () => {
-        const usersRef = firebase.firestore().collection('users')
-
-        usersRef.doc(userId.user.uid).collection('meal').add({
-            food: Food,
-            mood: Mood
-        })
-    }
-    */
 
     useEffect(()=>{
         var allMeals = firebase.firestore().collection('users').doc(userContext.user.uid)
@@ -129,14 +118,34 @@ export default function HomeScreen({navigation}) {
        }
    }
 
-
    const mealDone = (mealType) =>{
-        if(todayMealsList.includes(mealType)){
-            return true
-        }
-        else{
-            return false
-        }
+    if(todayMealsList.includes(mealType)){
+        return true
+    }
+    else{
+        return false
+    }
+   }
+
+   function mealCardStyle(mealType){
+    var style = 0
+    if(todayMealsList.includes(mealType)){
+        Object.keys(todayMealsObj).forEach(function(meal){
+            if(mealType === todayMealsObj[meal].type){
+                if(todayMealsObj[meal].didEat === true){
+                    console.log(todayMealsObj[meal])
+                    style = 2
+                }
+                else{
+                    style = 1
+                }
+            }
+           })
+    }
+    else{
+        style = 0
+    }
+    return style
    }
 
    mealPlanList = (mealPlan) => {
@@ -147,10 +156,13 @@ export default function HomeScreen({navigation}) {
     //(a.color === b.color) ? ((a.size > b.size) ? 1 : -1) : -1 )
   
     return mealPlan.map(meal => {
+        console.log(mealCardStyle(meal.id))
 
       return (
         <TouchableOpacity
-                    style={ mealDone(meal.id) ? styles.mealCardDone:styles.mealCard}
+                    //style={ mealDone(meal.id) ? ( mealEaten(meal.id) ? styles.mealCardDone : styles.mealCardNotEaten ):styles.mealCard}
+                    style={mealCardStyle(meal.id) === 2 ? styles.mealCardDone :
+                        mealCardStyle(meal.id) === 1 ? styles.mealCardNotEaten: styles.mealCard}
                     onPress={() => addMeal(meal)}>
                     <Text style={ mealDone(meal.id) ? styles.cardTitleDone:styles.cardTitle}>{ mealDone(meal.id)? '':'ADD '} {meal.name.toUpperCase()}</Text>
             </TouchableOpacity>

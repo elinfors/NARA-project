@@ -72,13 +72,15 @@ export default RegMeal = () =>{
         )
     }
 
+
+
     return(
         <>
         <View style={styles.ModalView}>
 
             <View style={styles.headlineView}>
             <View></View>
-            <Text>Todays {regMeal.type} 👋!</Text>
+            <Text style={styles.modalHeadline}>{regMeal.type === 'Snack1'||regMeal.type === 'Snack2'||regMeal.type === 'Snack3' ? 'SNACK':regMeal.type.toUpperCase()}</Text>
             <TouchableOpacity onPress={()=>handleClose()}>
                 <Ionicons name={'ios-close'} size={40} color={'black'} />
             </TouchableOpacity>

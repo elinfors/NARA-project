@@ -3,6 +3,8 @@ import React, { useEffect, useState, createContext } from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import { createStackNavigator } from '@react-navigation/stack'
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import moment from 'moment';
+
 
 //import { LoginScreen, HomeScreen, RegistrationScreen } from './Screens'
 import LoginScreen from "./Screens/LoginScreen/LoginScreen"
@@ -29,6 +31,7 @@ export const MealPlanContext = createContext();
 export const EditModalContext = createContext();
 export const AddMealplanContext = createContext();
 export const RegMealContext = createContext();
+export const ChooseDateContex = createContext();
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -56,6 +59,8 @@ export default function App() {
   const [mealPlan, setMealPlan] = useState([])
 
   const [regMeal, setRegMeal] = useState({})
+  const [choosenDate, setChoosenDate] = useState(moment().utcOffset('+01:00').format('YYYY-MM-DD'))
+
 
   //Meal plan context
   //const [mealPlan, setMealPlan] = useState([{name:'Breakfast', time:'07:00'}, {name:'Snack', time:'10.00'},{name:'Lunch', time:'12:00'}, {name: 'Snack', time:'15:00'}, {name:'Dinner', time:'19:00'}, {name:'Snack', time:'21:00'}])
@@ -287,20 +292,22 @@ export default function App() {
             <AddMealplanContext.Provider value ={{addModalVisible, setAddModalVisible}}>
             <MealPlanContext.Provider value={{mealPlan, setMealPlan, currentMealEdit, setCurrentMealEdit}}>
               <RegMealContext.Provider value = {{regMeal, setRegMeal}}>
-              <NavigationContainer>
-                <Stack.Navigator>
-                  {user ? (
-                    <Stack.Screen name="Today" children={createBottomTabs}>
-                    {/*{props => <HomeScreen {...props} extraData={user} />}*/}
-                    </Stack.Screen>
-                  ) : (
-                    <>
-                      <Stack.Screen name="Login" component={LoginScreen} />
-                      <Stack.Screen name="Registration" component={RegistrationScreen} />
-                      </>
-                  )}
-                  </Stack.Navigator>
-              </NavigationContainer>
+                <ChooseDateContex.Provider value = {{choosenDate, setChoosenDate}}>
+                  <NavigationContainer>
+                    <Stack.Navigator>
+                      {user ? (
+                        <Stack.Screen name="NearBy" children={createBottomTabs}>
+                        {/*{props => <HomeScreen {...props} extraData={user} />}*/}
+                        </Stack.Screen>
+                      ) : (
+                        <>
+                          <Stack.Screen name="Login" component={LoginScreen} />
+                          <Stack.Screen name="Registration" component={RegistrationScreen} />
+                          </>
+                      )}
+                      </Stack.Navigator>
+                  </NavigationContainer>
+                </ChooseDateContex.Provider>
               </RegMealContext.Provider>
             </MealPlanContext.Provider>
             </AddMealplanContext.Provider>
