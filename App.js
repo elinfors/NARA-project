@@ -19,6 +19,7 @@ import {decode, encode} from 'base-64'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import EditMealPlan from './Screens/MealPlan/EditMealPlan'
 import PrevReg from './Screens/PrevReg/PrevReg'
+import Statistics from './Screens/Statistics/statistics'
 
 
 if (!global.btoa) {  global.btoa = encode }
@@ -94,6 +95,7 @@ export default function App() {
       <OverviewStack.Navigator>
         <OverviewStack.Screen name="Overview Stack" component = {OverviewScreen}></OverviewStack.Screen>
         <OverviewStack.Screen name="PrevReg" component={PrevReg}></OverviewStack.Screen>
+        <OverviewStack.Screen name="Statistics" component={Statistics}></OverviewStack.Screen>
       </OverviewStack.Navigator>
     )
   }

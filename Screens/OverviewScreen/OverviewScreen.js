@@ -14,13 +14,18 @@ export default function OverviewScreen({navigation}) {
             <Text style={styles.headline}>CURRENT STREAK</Text>
             <View style={styles.streakRow}>
                 <View style={styles.card}>
-                <Text>3 DAYS</Text>
+                    <Text style={{fontSize:10, textAlign:'center'}}>Average registrations a day</Text>
+                    <Image style={{marginVertical:'10%'}} source={require('./steps2.png')}></Image>
+                    <Text style={{fontSize:20, textAlign:'center'}}>5</Text>
                 </View>
                 <View style={styles.bigCard}>
-                <Text>3 DAYS</Text>
+                    <Image style={{marginVertical:'10%'}}source={require('./checkmark.png')}></Image>
+                    <Text style={{fontSize:25}}>3 meals</Text>
                 </View>
                 <View style={styles.card}>
-                <Text>3 DAYS</Text>
+                    <Text style={{fontSize:10, textAlign:'center'}}>Longest streak</Text>
+                    <Image style={{marginVertical:'10%', width:30, height:30}} source={require('./checkmark.png')}></Image>
+                    <Text style={{fontSize:20, textAlign:'center'}}>15</Text>
                 </View>
             </View>
             <View style={styles.description}>
@@ -32,37 +37,54 @@ export default function OverviewScreen({navigation}) {
                 <Text style={styles.calText}>
                     Latest 7 days
                 </Text>
+                <View style={{flexDirection:'row'}}>
                 <Text style={styles.calText}>
                     Calendar
                 </Text>
+                <Image style={{marginRight:'6%'}}source={require('./arrow-forward.png')}></Image>
+                </View>
 
             </View>
             <View style={styles.calendarSum}>
                 <View style={styles.circle}>
-                    <Text>4</Text>
+                    <View style={styles.progressLayer2}> 
+                    <Text style={{transform:[{rotateZ: '-135deg'}]}}>3</Text>
+                    </View>
                 </View>
                 <View style={styles.circle}>
-                    <Text>4</Text>
+                    <View style={styles.progressLayer}> 
+                    <Text style={{transform:[{rotateZ: '-135deg'}]}}>4</Text>
+                    </View>
                 </View>
                 <View style={styles.circle}>
-                    <Text>4</Text>
+                    <View style={styles.progressLayer}> 
+                    <Text style={{transform:[{rotateZ: '-135deg'}]}}>4</Text>
+                    </View>
+                </View>
+                    <View style={styles.circle}>
+                    <View style={styles.progressLayer}> 
+                    <Text style={{transform:[{rotateZ: '-135deg'}]}}>4</Text>
+                </View>
+                   
                 </View>
                 <View style={styles.circle}>
-                    <Text>4</Text>
+                    <Text>6</Text>
                 </View>
                 <View style={styles.circle}>
-                    <Text>4</Text>
+                    <View style={styles.progressLayer2}> 
+                    <Text style={{transform:[{rotateZ: '-135deg'}]}}>3</Text>
+                </View>
                 </View>
                 <View style={styles.circle}>
-                    <Text>4</Text>
-                </View>
-                <View style={styles.circle}>
-                    <Text>4</Text>
+                    <View style={styles.progressLayer}> 
+                    <Text style={{transform:[{rotateZ: '-135deg'}]}}>4</Text>
+                    </View>
                 </View>
 
             </View>
             <View style={styles.buttonView}>
-                <TouchableOpacity style={styles.buttonCard}>
+                <TouchableOpacity style={styles.buttonCard}
+                  onPress={()=> navigation.navigate('Statistics')}>
                     <IconFeather name={'pie-chart'} size={20} color={'gray'} style={styles.buttonItem}></IconFeather>
                     <Text style={styles.buttonItem}>Statistics</Text>
                     <MaterialIcon name={'arrow-forward-ios'} size={20} color={'gray'} style={styles.buttonItem}></MaterialIcon>
@@ -91,7 +113,7 @@ const styles = StyleSheet.create({
     },
     headline:{
         flex:1,
-        padding:30,
+        marginBottom:'10%',
         fontSize: 30,
         flexDirection:'row',
         alignSelf:'center'
@@ -105,27 +127,26 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffffff',
         marginLeft: 15,
         marginRight: 15,
-        marginTop: 15,
-        height: 134,
-        width:134,
+        height: '180%',
+        width: '35%',
         borderRadius: 5,
         alignItems: 'center',
         justifyContent:'center',
-        flexDirection:'row',
+        flexDirection:'column',
         alignSelf:'flex-end'
         
     },
     card:{
         backgroundColor: '#ffffff',
-        marginLeft: 15,
-        marginRight: 15,
-        marginTop: 15,
-        height: 75,
-        width:75,
+        //marginLeft: 15,
+        //marginRight: 15,
+        //marginTop: 15,
+        height: '150%',
+        width:'25%',
         borderRadius: 5,
         alignItems: 'center',
         justifyContent:'center',
-        flexDirection:'row',
+        flexDirection:'column',
         alignSelf:'flex-end'
         
     },
@@ -164,6 +185,38 @@ const styles = StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
     },
+    progressLayer:{
+        width: 35,
+        height: 35,
+        borderRadius: 35/2,
+        borderWidth:4,
+        borderColor:'#ABDA9B',
+        //backgroundColor: '#ABDA9B',
+        justifyContent:'center',
+        alignItems:'center',
+        borderLeftColor: 'transparent',
+        borderBottomColor: '#E5E5E5',
+        borderRightColor: 'transparent',
+        borderTopColor: 'transparent',
+        transform:[{rotateZ: '135deg'}]
+
+    },
+    progressLayer2:{
+        width: 35,
+        height: 35,
+        borderRadius: 35/2,
+        borderWidth:4,
+        borderColor:'#ABDA9B',
+        //backgroundColor: '#ABDA9B',
+        justifyContent:'center',
+        alignItems:'center',
+        borderLeftColor: 'transparent',
+        borderBottomColor: '#E5E5E5',
+        borderRightColor: '#E5E5E5',
+        borderTopColor: 'transparent',
+        transform:[{rotateZ: '135deg'}]
+
+    },
     buttonView:{
         flex:3,
         flexDirection:'column',
@@ -182,7 +235,7 @@ const styles = StyleSheet.create({
         shadowRadius: 5 ,
         shadowOffset : { width: 1, height: 10},
         marginHorizontal: 10,
-        marginTop:50,
+        marginTop:'7%',
         flexDirection:'row',
         justifyContent:'flex-start'
     },
