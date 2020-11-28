@@ -5,6 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import IconFeather from 'react-native-vector-icons/Feather'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {CurrentUserContext} from '../../App'
 
 export default function OverviewScreen({navigation}) {
@@ -41,7 +42,8 @@ export default function OverviewScreen({navigation}) {
                 <Text style={styles.calText}>
                     Calendar
                 </Text>
-                <Image style={{marginRight:'6%'}}source={require('./arrow-forward.png')}></Image>
+                <Icon name='chevron-right' size={15} color={'black'} style={styles.buttonItem} />
+                
                 </View>
 
             </View>
@@ -87,7 +89,7 @@ export default function OverviewScreen({navigation}) {
                   onPress={()=> navigation.navigate('Statistics')}>
                     <IconFeather name={'pie-chart'} size={20} color={'gray'} style={styles.buttonItem}></IconFeather>
                     <Text style={styles.buttonItem}>Statistics</Text>
-                    <MaterialIcon name={'arrow-forward-ios'} size={20} color={'gray'} style={styles.buttonItem}></MaterialIcon>
+                    <Icon name='chevron-right' size={15} color={'gray'} style={styles.buttonItem}/>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles.buttonCard}
                     onPress={()=> navigation.navigate('PrevReg')}>
@@ -95,7 +97,7 @@ export default function OverviewScreen({navigation}) {
                     <Text style={styles.buttonItem}>
                         Previous registrations
                     </Text>
-                    <MaterialIcon name={'arrow-forward-ios'} size={20} color={'gray'} style={styles.buttonItem}></MaterialIcon>
+                    <Icon name='chevron-right' size={15} color={'gray'} style={styles.buttonItem} />
                 </TouchableOpacity>
 
             </View>
