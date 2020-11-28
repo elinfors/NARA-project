@@ -120,8 +120,8 @@ export default function App() {
             else if (route.name === 'Overview'){
               iconName = focused ? 'line-chart' : 'line-chart';
             }
-            else if (route.name === 'Settings') {
-              iconName = focused ? 'cog' : 'cog';
+            else if (route.name === 'Profile') {
+              iconName = focused ? 'user' : 'user';
             }
             // You can return any component that you like here!
             return <Icon name={iconName} size={20} color={color} />;
@@ -140,7 +140,7 @@ export default function App() {
           tabBarButton: ()=>(<AddModal/>),}}/>
         <Tab.Screen name = 'Overview' component = {overViewStack}/>
           
-        <Tab.Screen name = 'Settings' component = {Settings}/>
+        <Tab.Screen name = 'Profile' component = {Settings}/>
 
 
       </Tab.Navigator>
@@ -163,7 +163,8 @@ export default function App() {
     mealplanExistsRef.onSnapshot(function(querySnapshot){
         var mealplanList = []
         querySnapshot.forEach(function(doc){
-            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification, id: doc.data().id, notificationTime:doc.data().notificationTime})
+            mealplanList.push({name: doc.data().name, time: doc.data().time, notification: doc.data().notification, id: doc.data().id, 
+              notificationHour:doc.data().notificationHour, notificationMin:doc.data().notificationMin})
         })
 
           if(mealplanList.length === 0){
@@ -206,7 +207,8 @@ export default function App() {
             name:'Snack',
             time:'11:00',
             notification: true,
-            notificationTime: '0:15',
+            notificationHour: '0',
+            notificationMin:'15',
             id: "Snack1"
 
         })
@@ -221,7 +223,8 @@ export default function App() {
           name:'Lunch',
           time:'13:00',
           notification: true,
-          notificationTime: '0:15',
+          notificationHour: '0',
+          notificationMin:'15',
           id: "Lunch"
 
         })
@@ -236,7 +239,8 @@ export default function App() {
           name:'Snack',
           time:'16:00',
           notification: true,
-          notificationTime: '0:15',
+          notificationHour: '0',
+          notificationMin:'15',
           id: "Snack2"
 
         })
@@ -250,7 +254,8 @@ export default function App() {
           name:'Dinner',
           time:'19:00',
           notification: true,
-          notificationTime: '0:15',
+          notificationHour: '0',
+          notificationMin:'15',
           id: "Dinner"
 
         })
@@ -264,7 +269,8 @@ export default function App() {
           name:'Snack',
           time:'21:00',
           notification: true,
-          notificationTime: '0:15',
+          notificationHour: '0',
+            notificationMin:'15',
           id: "Snack3"
 
         })

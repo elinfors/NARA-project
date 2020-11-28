@@ -98,13 +98,7 @@ export default function MealPlan({navigation}) {
 
     return (
         <>
-        <View>
-            <TouchableOpacity
-                    onPress={() => onLogoutPress()}>
-                    <Text>Log out</Text>
-            </TouchableOpacity>
-            
-        </View>
+
         <ScrollView>
             <View>{mealPlanList(mealPlan)}
            </View>
