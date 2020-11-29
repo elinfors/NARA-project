@@ -51,7 +51,7 @@ export default function Settings({navigation}) {
     return (
         <>
         <View style={styles.headlineView}>
-        <Text style={styles.headlineText}>Sign in as:</Text>
+        <Text style={styles.headlineText}>Signed in as:</Text>
         <Text style={styles.headlineTextName}>{userEmail}</Text>
         </View>
         {/*
