@@ -69,6 +69,7 @@ export default SettingsScreen = () => {
         <>
         
             <View style={styles.ModalView}>
+                
                 <View style={styles.headlineView}>  
                     <TouchableOpacity onPress={()=>handleClose()}>
                         <Ionicons name={'ios-close'} size={40} color={'black'} />
@@ -76,7 +77,7 @@ export default SettingsScreen = () => {
                     <Text style={styles.settingsText}>SETTINGS</Text> 
                     <Text>   </Text>
                 </View>
-
+                <ScrollView style={{height:'85%'}}>
                             {/*ITEM 1*/}
                             <View style={{flex:1, alignItems:'center'}}>  
                                 <Text style={styles.mealTitle}>{name}</Text> 
@@ -217,7 +218,7 @@ export default SettingsScreen = () => {
                         
                         </View>
 
-
+            </ScrollView>
             </View>
         </>
     )
@@ -260,7 +261,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
       },
       pickers:{
-        flex:4,
+        flex:8,
         flexDirection:'row',
         alignSelf:'center',
         justifyContent:'center'

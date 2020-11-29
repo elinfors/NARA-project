@@ -1,7 +1,18 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-
+    headlineView:{
+        marginTop:'10%',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    headlineText:{
+        fontSize:20
+    },
+    headlineTextName:{
+        fontSize:20,
+        fontStyle:'italic'
+    },
     button: {
         backgroundColor: '#7CA179',
         borderRadius: 5,
