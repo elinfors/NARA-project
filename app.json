@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "nara-project-new",
-    "slug": "nara-project-new",
+    "name": "NearBy",
+    "slug": "nearby-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -17,10 +17,14 @@
       "**/*"
     ],
     "ios": {
+      "bundleIdentifier": "com.nearby.nearby",
+     "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": ""
   }
 }
+
