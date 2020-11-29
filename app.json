@@ -4,7 +4,7 @@
     "slug": "nearby-app",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/LOGO.png",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
@@ -18,7 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.nearby.nearby",
-     "buildNumber": "1.0.0",
+      "buildNumber": "1.0.0",
       "supportsTablet": true
     },
     "web": {
