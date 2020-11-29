@@ -17,10 +17,10 @@ export default function Settings({navigation}) {
         //var user = firebase.firestore().collection('users').doc(userContext.user.uid)
         
         var user = firebase.auth().currentUser;
-
         user.providerData.forEach(function (profile) {
+          console.log(profile)
             setUserEmail(profile.email)
-            setUserDisplayName(profile.displayName)
+            setUserDisplayName(profile.name)
         })
 
         
@@ -50,13 +50,17 @@ export default function Settings({navigation}) {
 
     return (
         <>
-        <Text>{userEmail}</Text>
-        <Text>{userDisplayName}</Text>
+        <View style={styles.headlineView}>
+        <Text style={styles.headlineText}>Sign in as:</Text>
+        <Text style={styles.headlineTextName}>{userEmail}</Text>
+        </View>
+        {/*
         <TouchableOpacity
                     style={styles.button}
                     onPress={() => handleChangeName()}>
                     <Text style={styles.buttonTitle}>Update name</Text>
         </TouchableOpacity>
+        */}
         <TouchableOpacity
                     style={styles.button}
                     onPress={() => onLogoutPress()}>

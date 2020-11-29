@@ -7,6 +7,7 @@ import {EditModalContext} from '../../App'
 import {MealPlanContext} from '../../App'
 import SettingsScreen from './SettingsScreen'
 import AddMealModal from './AddMealModal'
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 export default EditMealPlan=()=> {
