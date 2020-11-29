@@ -83,14 +83,14 @@ export default SettingsScreen = () => {
                                 <Text style={styles.mealTitle}>{name}</Text> 
                             </View>
                             {/*ITEM 2*/}
-                            <View style={{flex:1}}>
+                            <View style={{flex:1, justifyContent:'center', alignItems:'center'}}>
                                 <Text>At what time would you like to eat?</Text>
                             </View>
                             {/*ITEM 3*/}
                             <View style={styles.pickers}>
                                 <Picker
                                 selectedValue={hour}
-                                style={{height: 30, width: 150}}
+                                style={{width: 150}}
                                 onValueChange={(itemValue, itemIndex) =>
                                 setHour(itemValue)
                                 }>
@@ -120,7 +120,7 @@ export default SettingsScreen = () => {
                                 </Picker>
                                 <Picker
                                 selectedValue={minute}
-                                style={{height: 30, width: 150}}
+                                style={{width: 150}}
                                 onValueChange={(itemValue, itemIndex) =>
                                 setMinute(itemValue)
                                 }>
@@ -133,7 +133,7 @@ export default SettingsScreen = () => {
                             
                             {/*ITEM 4 - items should be on the same row*/}
                             <View style={styles.noticeView}>
-                                <Text style={{paddingVertical:10}}>Notification to register meal</Text>
+                                <Text style={{paddingVertical:10, marginRight:10}}>Notification to register meal</Text>
                             
                     
                                 <Switch
@@ -156,7 +156,7 @@ export default SettingsScreen = () => {
                         {console.log('i picker ', reminderHour)}
                         <Picker
                         selectedValue={reminderHour}
-                        style={{height: 30, width: 100}}
+                        style={{width: 100}}
                         onValueChange={(itemValue2, itemIndex) =>
                         setReminderHour(itemValue2)
                         }>
@@ -166,7 +166,7 @@ export default SettingsScreen = () => {
 
                         <Picker
                         selectedValue={reminderMinute}
-                        style={{height: 30, width: 100}}
+                        style={{width: 100}}
                         onValueChange={(itemValue, itemIndex) =>
                         setReminderMinute(itemValue)
                         }> 
@@ -264,7 +264,8 @@ const styles = StyleSheet.create({
         flex:8,
         flexDirection:'row',
         alignSelf:'center',
-        justifyContent:'center'
+        justifyContent:'center',
+        position: 'relative'
       },
       switch: {
         flex: 1,
@@ -304,7 +305,7 @@ const styles = StyleSheet.create({
       noticeView:{
           flex:1,
           flexDirection:'row',
-          justifyContent:'space-between'
+          justifyContent:'flex-start'
       }
     
   });
