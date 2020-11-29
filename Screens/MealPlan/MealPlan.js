@@ -123,6 +123,7 @@ export default function MealPlan({navigation}) {
 
     return (
         <>
+
         <View style={styles.headlineTextView}>
             <Text style={styles.headlineText}>MEAL PLAN</Text>
             <Text style={styles.headlineTextSmall}>Set a plan for what meals you strive to eat each day</Text>
@@ -141,6 +142,7 @@ export default function MealPlan({navigation}) {
             />
         </View>
         
+
             <View>{mealPlanList(mealPlan)}
            </View>
            <View style={styles.nextBtnView}>

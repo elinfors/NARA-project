@@ -15,27 +15,25 @@ export default SettingsScreen = () => {
     const {editModalVisible, setEditModalVisible} = useContext(EditModalContext)
     const [hour, setHour] = useState(currentMealEdit.time.substr(0,2))
     const [minute, setMinute] = useState(currentMealEdit.time.substr(3,4))
-    const [reminderHour, setReminderHour] = useState(currentMealEdit.notificationTime.substr(0))
-    const [reminderMinute, setReminderMinute] = useState(currentMealEdit.notificationTime.substr(2,3))
+    const [reminderHour, setReminderHour] = useState(currentMealEdit.notificationHour)
+    const [reminderMinute, setReminderMinute] = useState(currentMealEdit.notificationMin)
     const [isEnabled, setIsEnabled] = useState(currentMealEdit.notification);
-   
 
 
     var name = currentMealEdit.name.toUpperCase();
 
     const toggleSwitch = () => {
         setIsEnabled(!isEnabled);
-        console.log("notification ", isEnabled)
     }
 
     const handleSubmit = () =>{
         var mealRef = firebase.firestore().collection('users').doc(userContext.user.uid).collection('mealplan').doc(currentMealEdit.id)
-
         mealRef.set({
             name: currentMealEdit.name,
             time: hour + ":"+ minute,
             notification: isEnabled, 
-            notificationTime: reminderHour + ":" + reminderMinute,
+            notificationHour: reminderHour,
+            notificationMin: reminderMinute,
             id: currentMealEdit.id
         })
         .then(function(){
@@ -126,7 +124,6 @@ export default SettingsScreen = () => {
                                 onValueChange={(itemValue, itemIndex) =>
                                 setMinute(itemValue)
                                 }>
-                                    {console.log("minute: ", minute)}
                                 <Picker.Item label="00" value="00" />
                                 <Picker.Item label="15" value="15" />
                                 <Picker.Item label="30" value="30" />
@@ -156,11 +153,12 @@ export default SettingsScreen = () => {
                     </View>
                     {/*ITEM 6*/}
                     <View style={styles.pickers}>
+                        {console.log('i picker ', reminderHour)}
                         <Picker
                         selectedValue={reminderHour}
                         style={{height: 30, width: 100}}
-                        onValueChange={(itemValue, itemIndex) =>
-                        setReminderHour(itemValue)
+                        onValueChange={(itemValue2, itemIndex) =>
+                        setReminderHour(itemValue2)
                         }>
                             <Picker.Item label="0 h" value="0" />
                             <Picker.Item label="1 h" value="1" />
@@ -172,7 +170,6 @@ export default SettingsScreen = () => {
                         onValueChange={(itemValue, itemIndex) =>
                         setReminderMinute(itemValue)
                         }> 
-                        {console.log("reminderminute: ",reminderMinute)}
                             <Picker.Item label="0 min" value="0" />
                             <Picker.Item label="1 min" value="1" />
                             <Picker.Item label="2 min" value="2" />
